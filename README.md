@@ -26,8 +26,11 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.0.0 release  
-simple date picker for android library
+- version 1.0.1 release  
+onPageChange -> onCalendarPageChange...
+onClick -> onCalendarClick...
+xml custom view -> CalendarLayout remove
+
 ---
 
 ### Usage ###
@@ -35,7 +38,7 @@ __layout.xml__
 
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.0.0'
+implementation 'com.github.parasde:SimpleDatePicker:1.0.1'
 
 ```
 
