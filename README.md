@@ -30,6 +30,7 @@ Use the following method to show the header
 onPageChange -> onCalendarPageChange...
 onClick -> onCalendarClick...
 xml custom view -> CalendarLayout remove
+layout height fix
 
 ---
 
