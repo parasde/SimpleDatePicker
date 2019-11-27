@@ -27,10 +27,10 @@ Use the following method to show the header
 ### note ###
 
 - version 1.0.1 release  
-onPageChange -> onCalendarPageChange...
-onClick -> onCalendarClick...
-xml custom view -> CalendarLayout remove
-layout height fix
+onPageChange -> onCalendarPageChange...  
+onClick -> onCalendarClick...  
+xml custom view -> CalendarLayout remove  
+layout height fix  
 
 ---
 
