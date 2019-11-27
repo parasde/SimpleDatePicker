@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="calHeader">#4EA2F5</color>
+    <color name="calDate">#4A4A4A</color>
+    <color name="calSunday">#E34646</color>
+    <color name="calSelected">#CC750D1E</color>
+
+    <color name="skyBlue">#dEFDFF</color>
+    <color name="alphaSkyBlue">#E6dEFDFF</color>
+</resources>

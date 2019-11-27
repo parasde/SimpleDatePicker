@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/calHeader"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textColor="@color/calHeader"
+        android:layout_marginTop="10dp"
+        android:textSize="24dp"
+        android:textAlignment="center"/>
+
+    <com.parasde.library.simpledatepicker.view.CalendarPagerView
+        android:id="@+id/cal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+</LinearLayout>
