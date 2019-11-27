@@ -2,6 +2,7 @@ package com.parasde.library.simpledatepicker.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -19,13 +20,8 @@ class CalendarPagerView: ViewPager, CalendarPager {
     constructor(@NonNull context: Context): this(context, null)
     constructor(@NonNull context: Context, attrs: AttributeSet?): super(context, attrs)
 
-    companion object {
-        const val NORMAL = 900
-    }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(widthMeasureSpec, NORMAL)
+        super.onMeasure(widthMeasureSpec, getHeightMeasureSpec(widthMeasureSpec, heightMeasureSpec))
     }
 
     private val calendar = Calendar.getInstance().clone() as Calendar
@@ -41,6 +37,25 @@ class CalendarPagerView: ViewPager, CalendarPager {
     private var calendarOnClickListener: CalendarClickListener? = null
 
     private lateinit var calendarClickData: CalendarClickData
+
+    // get child view height
+    private fun getHeightMeasureSpec(widthMeasureSpec: Int, heightMeasureSpec: Int): Int {
+        var hm = heightMeasureSpec
+        for(i in 0 until childCount) {
+            val v: View? = getChildAt(i)
+            if(v != null) {
+                var height = 0
+                v.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED))
+                val viewHeight = v.measuredHeight
+                if(viewHeight > height) {
+                    height = viewHeight
+                }
+                hm = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+            }
+        }
+
+        return hm
+    }
 
     // pager select calendar year, month
     override fun setCalendarPageChangeListener(listener: CalendarOnPageChangeListener) {
@@ -99,7 +114,7 @@ class CalendarPagerView: ViewPager, CalendarPager {
         fragmentAdapter.addItem(CalendarFragmentPager(calendar, onClickListener, calendarClickData), "1")
         fragmentAdapter.addItem(CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData), "2")
         this.adapter = fragmentAdapter
-        this.currentItem = 1
+        this.setCurrentItem(1, false)
 
         this.addOnPageChangeListener(object: OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {

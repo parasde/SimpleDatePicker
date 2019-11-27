@@ -6,19 +6,62 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/calHeader"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:textColor="@color/calHeader"
-        android:layout_marginTop="10dp"
-        android:textSize="24dp"
-        android:textAlignment="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <com.parasde.library.simpledatepicker.view.CalendarPagerView
-        android:id="@+id/cal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/calHeader"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textColor="@color/calHeader"
+            android:layout_marginTop="10dp"
+            android:textSize="24dp"
+            android:textAlignment="center"/>
 
-    </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+        <com.parasde.library.simpledatepicker.view.CalendarPagerView
+            android:id="@+id/cal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+
+        <!-- scroll pager test -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="inside ScrollView"/>
+
+                <com.parasde.library.simpledatepicker.view.CalendarPagerView
+                    android:id="@+id/cal2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:text="height 300 dp!"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:text="height 300 dp!"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout>

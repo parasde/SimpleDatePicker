@@ -20,13 +20,17 @@ import kotlin.collections.ArrayList
  * day of week, blank, date ...
  */
 class CalendarLayoutView(private val context: Context): CalendarLayout {
-    private var dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
+    private var dayOfWeek: Array<String> = arrayOf("SUN", "MON", "TUE", "WED", "THE", "FRI", "SAT")
 
     private var calendarClickListener: CalendarClickListener? = null
 
     private lateinit var cal: Calendar
     private lateinit var calendarClickData: CalendarClickData
     private lateinit var calendarData: ArrayList<CalendarData>
+
+    companion object {
+        const val NORMAL = 900
+    }
 
     override fun setCalendarDateOnClickListener(listener: CalendarClickListener) {
         calendarClickListener = listener
@@ -44,7 +48,7 @@ class CalendarLayoutView(private val context: Context): CalendarLayout {
         // add date
         val gridLayout = GridLayout(context)
         gridLayout.layoutParams =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, NORMAL)
         gridLayout.columnCount = 7
 
         // get first date of month

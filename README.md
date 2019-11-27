@@ -26,12 +26,10 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.0.1 release  
-onPageChange -> onCalendarPageChange...  
-onClick -> onCalendarClick...  
-xml custom view -> CalendarLayout remove  
-layout height fix  
-
+- version 1.0.2 release  
+CalendarPagerView available in ScrollView     
+Remove duplicate code  
+change DayOfWeek name(Korean -> English)  
 ---
 
 ### Usage ###
@@ -39,7 +37,7 @@ __layout.xml__
 
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.0.1'
+implementation 'com.github.parasde:SimpleDatePicker:1.0.2'
 
 ```
 

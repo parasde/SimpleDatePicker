@@ -41,5 +41,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+
+        // scroll bar calendar test
+        cal2.init(this as AppCompatActivity)
     }
 }

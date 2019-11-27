@@ -29,7 +29,6 @@ class CalendarFragmentPager(calendar: Calendar,
 
     override fun onCreateView(layout: LinearLayout) {
         val calLayout = CalendarLayoutView(rootView.context)
-        calLayout.onCreateLayout(cal, weekDay, calendarClickData)
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener)
         layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData))
     }
