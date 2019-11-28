@@ -3,6 +3,7 @@ package com.parasde.library.simpledatepicker.view
 import android.widget.LinearLayout
 import com.parasde.library.simpledatepicker.R
 import com.parasde.library.simpledatepicker.data.CalendarClickData
+import com.parasde.library.simpledatepicker.data.CalendarSize
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener
 import java.util.*
 
@@ -15,7 +16,8 @@ import java.util.*
 class CalendarFragmentPager(calendar: Calendar,
                             private val calendarClickListener: CalendarClickListener?,
                             private val calendarClickData: CalendarClickData,
-                            private val weekDay: Array<String>? = null): CalendarFragment() {
+                            private val weekDay: Array<String>? = null,
+                            private val size: CalendarSize): CalendarFragment() {
     private val cal = calendar.clone() as Calendar
 
     // select pager calendar
@@ -30,6 +32,6 @@ class CalendarFragmentPager(calendar: Calendar,
     override fun onCreateView(layout: LinearLayout) {
         val calLayout = CalendarLayoutView(rootView.context)
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener)
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData))
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size))
     }
 }

@@ -2,12 +2,15 @@ package com.parasde.library.simpledatepicker.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.ViewPager
 import com.parasde.library.simpledatepicker.data.CalendarClickData
+import com.parasde.library.simpledatepicker.data.CalendarSize
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener
 import java.util.*
@@ -37,6 +40,8 @@ class CalendarPagerView: ViewPager, CalendarPager {
     private var calendarOnClickListener: CalendarClickListener? = null
 
     private lateinit var calendarClickData: CalendarClickData
+
+    private var swipeEnable = true
 
     // get child view height
     private fun getHeightMeasureSpec(widthMeasureSpec: Int, heightMeasureSpec: Int): Int {
@@ -73,15 +78,15 @@ class CalendarPagerView: ViewPager, CalendarPager {
     }
 
     // initialize pager, add calendar fragment + draw calendar
-    override fun init(activity: AppCompatActivity) {
+    override fun init(activity: AppCompatActivity, dayOfWeek: Array<String>?, size: CalendarSize) {
         this.activity = activity
 
         calendarClickData = CalendarClickData()
-        onCreatePager()
+        onCreatePager(dayOfWeek, size)
     }
 
     // initialize pager, set calendar
-    override fun init(activity: AppCompatActivity, year: Int, month: Int) {
+    override fun init(activity: AppCompatActivity, year: Int, month: Int, dayOfWeek: Array<String>?, size: CalendarSize) {
         this.activity = activity
 
         calendar.set(Calendar.YEAR, year)
@@ -90,11 +95,11 @@ class CalendarPagerView: ViewPager, CalendarPager {
         nextCalendar = nextMonthCalendar()
 
         calendarClickData = CalendarClickData()
-        onCreatePager()
+        onCreatePager(dayOfWeek, size)
     }
 
     // parameter date set background color
-    override fun init(activity: AppCompatActivity, year: Int, month: Int, date: Int) {
+    override fun init(activity: AppCompatActivity, year: Int, month: Int, date: Int, dayOfWeek: Array<String>?, size: CalendarSize) {
         this.activity = activity
 
         calendar.set(Calendar.YEAR, year)
@@ -103,16 +108,16 @@ class CalendarPagerView: ViewPager, CalendarPager {
         nextCalendar = nextMonthCalendar()
 
         calendarClickData = CalendarClickData(null, year, month, date)
-        onCreatePager()
+        onCreatePager(dayOfWeek, size)
     }
 
-    private fun onCreatePager() {
+    private fun onCreatePager(dayOfWeek: Array<String>?, size: CalendarSize) {
         this.fragment = activity.supportFragmentManager
         this.fragmentAdapter = CalendarFragmentPagerAdapter(fragment)
 
-        fragmentAdapter.addItem(CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData), "0")
-        fragmentAdapter.addItem(CalendarFragmentPager(calendar, onClickListener, calendarClickData), "1")
-        fragmentAdapter.addItem(CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData), "2")
+        fragmentAdapter.addItem(CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, size), "0")
+        fragmentAdapter.addItem(CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, size), "1")
+        fragmentAdapter.addItem(CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, size), "2")
         this.adapter = fragmentAdapter
         this.setCurrentItem(1, false)
 
@@ -135,7 +140,6 @@ class CalendarPagerView: ViewPager, CalendarPager {
              * last index pager -> next month calendar fragment add and notifyDataSetChanged . apply
              */
             override fun onPageSelected(position: Int) {
-                // current pager change. return year and month value
                 if(onPageChangeListener != null) {
                     val fragmentCalendar = (fragmentAdapter.getItem(position) as CalendarFragmentPager).getCalendar()
                     onPageChangeListener!!.onChange(
@@ -148,14 +152,14 @@ class CalendarPagerView: ViewPager, CalendarPager {
                     // left swipe
                     calendar.add(Calendar.MONTH, -1)
                     minPrevMonth()
-                    fragmentAdapter.addPrevItem(CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData), "$position")
+                    fragmentAdapter.addPrevItem(CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, size), "$position")
                     this@CalendarPagerView.invalidate()
                     this@CalendarPagerView.setCurrentItem(position+1, false)
                 } else if(position == fragmentAdapter.count-1) {    // last index..
                     // right swipe
                     calendar.add(Calendar.MONTH, 2)
                     addNextMonth()
-                    fragmentAdapter.addItem(CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData), "$position")
+                    fragmentAdapter.addItem(CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, size), "$position")
                 }
             }
 
@@ -189,6 +193,22 @@ class CalendarPagerView: ViewPager, CalendarPager {
     private inner class CalendarDateOnClick: CalendarClickListener {
         override fun onClick(year: Int, month: Int, date: Int) {
             if(calendarOnClickListener != null) calendarOnClickListener!!.onClick(year, month, date)
+        }
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        return if(swipeEnable) {
+            super.onInterceptTouchEvent(ev)
+        }else {
+            false
+        }
+    }
+
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        return if(swipeEnable) {
+            super.onTouchEvent(ev)
+        }else {
+            false
         }
     }
 }

@@ -26,10 +26,14 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.0.2 release  
-CalendarPagerView available in ScrollView     
-Remove duplicate code  
-change DayOfWeek name(Korean -> English)  
+- version 1.0.3 release  
+change dayOfWeek name  
+change calendar size(SMALL, NORMAL, BIG) NORMAL - default  
+calendar not drawing error correction  
+  
+Fix Error 
+- not showing calendar
+
 ---
 
 ### Usage ###
@@ -67,23 +71,48 @@ __MainActivity.kt__
 
 ```
 // Initialize
-cal.init(this as AppCompatActivity)
 
-// pageChange -> callback change year, month value
-cal.setCalendarPageChangeListener(object:
-    CalendarOnPageChangeListener {
-        override fun onChange(year: Int, month: Int) {
-            // calHeader (TextView) direct set header text
-            if(month < 9) calHeader.text = "$year - 0${month+1}"
-            else calHeader.text = "$year - ${month+1}"
-        }
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+
+        val calendar = Calendar.getInstance().clone() as Calendar
+
+        /**
+         * calendar init non parameter -> current month calendar
+         * calendar init (year, month) -> year-month == calendar
+         * calendar init (year, month, date) -> year-month-date == calendar / and add set date marker
+         */
+         
+        
+        // change dayOfweek name 
+        val dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
+         
+        cal.init(this as AppCompatActivity, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(
+            Calendar.DATE), dayOfWeek, CalendarSize.BIG)
+
+        // pageChange -> callback change year, month value
+        cal.setCalendarPageChangeListener(object:
+            CalendarOnPageChangeListener {
+            override fun onChange(year: Int, month: Int) {
+                if(month < 9) calHeader.text = "$year - 0${month+1}"
+                else calHeader.text = "$year - ${month+1}"
+            }
         })
 
-// callback click item value
-cal.setCalendarClickListener(object: CalendarClickListener {
-    override fun onClick(year: Int, month: Int, date: Int) {
-        Toast.makeText(applicationContext, "$year ${month+1} $date", Toast.LENGTH_SHORT).show()
+        // callback click item value
+        cal.setCalendarClickListener(object: CalendarClickListener {
+            override fun onClick(year: Int, month: Int, date: Int) {
+                Toast.makeText(applicationContext, "$year ${month+1} $date", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
-    })
+}
+
+
 ```
 ---

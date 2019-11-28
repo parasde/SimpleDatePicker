@@ -3,6 +3,7 @@ package com.parasde.simpledatepicker
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.parasde.library.simpledatepicker.data.CalendarSize
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
          * calendar init (year, month, date) -> year-month-date == calendar / and add set date marker
          */
         cal.init(this as AppCompatActivity, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(
-            Calendar.DATE))
+            Calendar.DATE), null, CalendarSize.BIG)
 
         // pageChange -> callback change year, month value
         cal.setCalendarPageChangeListener(object:
@@ -43,7 +44,9 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+        val dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
+
         // scroll bar calendar test
-        cal2.init(this as AppCompatActivity)
+        cal2.init(this as AppCompatActivity, dayOfWeek)
     }
 }

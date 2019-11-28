@@ -1,6 +1,7 @@
 package com.parasde.library.simpledatepicker.view
 
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.GridLayout
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.parasde.library.simpledatepicker.R
 import com.parasde.library.simpledatepicker.data.CalendarClickData
 import com.parasde.library.simpledatepicker.data.CalendarData
+import com.parasde.library.simpledatepicker.data.CalendarSize
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener
 import java.util.*
 import kotlin.collections.ArrayList
@@ -28,15 +30,12 @@ class CalendarLayoutView(private val context: Context): CalendarLayout {
     private lateinit var calendarClickData: CalendarClickData
     private lateinit var calendarData: ArrayList<CalendarData>
 
-    companion object {
-        const val NORMAL = 900
-    }
 
     override fun setCalendarDateOnClickListener(listener: CalendarClickListener) {
         calendarClickListener = listener
     }
 
-    override fun onCreateLayout(calendar: Calendar, weekDay: Array<String>?, calendarClickData: CalendarClickData): GridLayout {
+    override fun onCreateLayout(calendar: Calendar, weekDay: Array<String>?, calendarClickData: CalendarClickData, size: CalendarSize): GridLayout {
         cal = calendar.clone() as Calendar
         calendarData = ArrayList()
         this.calendarClickData = calendarClickData
@@ -48,7 +47,7 @@ class CalendarLayoutView(private val context: Context): CalendarLayout {
         // add date
         val gridLayout = GridLayout(context)
         gridLayout.layoutParams =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, NORMAL)
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, size.colSize()*7)
         gridLayout.columnCount = 7
 
         // get first date of month
@@ -88,7 +87,7 @@ class CalendarLayoutView(private val context: Context): CalendarLayout {
                 GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),
                 GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
             )
-            params.height = 144
+            params.height = size.colSize()
             tv.layoutParams = params
             tv.textAlignment = View.TEXT_ALIGNMENT_CENTER
             tv.gravity = Gravity.CENTER_VERTICAL
