@@ -41,7 +41,7 @@ __layout.xml__
 
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.0.2'
+implementation 'com.github.parasde:SimpleDatePicker:1.0.3'
 
 ```
 
