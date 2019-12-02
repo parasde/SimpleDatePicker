@@ -145,7 +145,8 @@ class CalendarLayoutView(private val context: Context): CalendarLayout {
                 calendarClickData.month = calendarData[position].month
                 calendarClickData.date = calendarData[position].date
 
-                calendarClickListener!!.onClick(calendarData[position].year, calendarData[position].month, calendarData[position].date)
+                // 2019.12.01 return month 1 ~ 12
+                calendarClickListener!!.onClick(calendarData[position].year, calendarData[position].month+1, calendarData[position].date)
             }
         }
 

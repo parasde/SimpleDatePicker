@@ -26,13 +26,10 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.0.3 release  
-change dayOfWeek name  
-change calendar size(SMALL, NORMAL, BIG) NORMAL - default  
-calendar not drawing error correction  
-  
-Fix Error 
-- not showing calendar
+- version 1.1.3 release  
+calendar set month(init) value and calendar click return month value range 1 ~ 12 change  
+캘린더 초기화 값 범위, 달력 일자 클릭 시 반환되는 month 범위 1 ~ 12 로 변경
+
 
 ---
 
@@ -41,7 +38,7 @@ __layout.xml__
 
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.0.3'
+implementation 'com.github.parasde:SimpleDatePicker:1.1.3'
 
 ```
 
@@ -79,34 +76,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val calendar = Calendar.getInstance().clone() as Calendar
-
-        /**
-         * calendar init non parameter -> current month calendar
-         * calendar init (year, month) -> year-month == calendar
-         * calendar init (year, month, date) -> year-month-date == calendar / and add set date marker
-         */
-         
-        
-        // change dayOfweek name 
-        val dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
-         
-        cal.init(this as AppCompatActivity, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(
-            Calendar.DATE), dayOfWeek, CalendarSize.BIG)
+        cal.init(this as AppCompatActivity, 2019, 12, 2, null, CalendarSize.BIG)
 
         // pageChange -> callback change year, month value
         cal.setCalendarPageChangeListener(object:
             CalendarOnPageChangeListener {
             override fun onChange(year: Int, month: Int) {
-                if(month < 9) calHeader.text = "$year - 0${month+1}"
-                else calHeader.text = "$year - ${month+1}"
+                if(month < 10) calHeader.text = "$year - 0${month}"
+                else calHeader.text = "$year - $month"
             }
         })
 
         // callback click item value
         cal.setCalendarClickListener(object: CalendarClickListener {
             override fun onClick(year: Int, month: Int, date: Int) {
-                Toast.makeText(applicationContext, "$year ${month+1} $date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show()
             }
 
         })

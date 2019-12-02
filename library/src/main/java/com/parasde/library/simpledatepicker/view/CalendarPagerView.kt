@@ -63,12 +63,13 @@ class CalendarPagerView: ViewPager, CalendarPager {
     }
 
     // pager select calendar year, month
+    // 2019.12.01 return month 1 ~ 12
     override fun setCalendarPageChangeListener(listener: CalendarOnPageChangeListener) {
         onPageChangeListener = listener
         val fragmentCalendar = (fragmentAdapter.getItem(this.currentItem) as CalendarFragmentPager).getCalendar()
         onPageChangeListener!!.onChange(
             fragmentCalendar.get(Calendar.YEAR),
-            fragmentCalendar.get(Calendar.MONTH)
+            fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
         )
     }
 
@@ -86,11 +87,13 @@ class CalendarPagerView: ViewPager, CalendarPager {
     }
 
     // initialize pager, set calendar
+    // input month 1 ~ 12 value
     override fun init(activity: AppCompatActivity, year: Int, month: Int, dayOfWeek: Array<String>?, size: CalendarSize) {
         this.activity = activity
+        val mMonth = month-1
 
         calendar.set(Calendar.YEAR, year)
-        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.MONTH, mMonth)
         prevCalendar = prevMonthCalendar()
         nextCalendar = nextMonthCalendar()
 
@@ -99,15 +102,17 @@ class CalendarPagerView: ViewPager, CalendarPager {
     }
 
     // parameter date set background color
+    // input month 1 ~ 12 value
     override fun init(activity: AppCompatActivity, year: Int, month: Int, date: Int, dayOfWeek: Array<String>?, size: CalendarSize) {
         this.activity = activity
+        val mMonth = month-1
 
         calendar.set(Calendar.YEAR, year)
-        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.MONTH, mMonth)
         prevCalendar = prevMonthCalendar()
         nextCalendar = nextMonthCalendar()
 
-        calendarClickData = CalendarClickData(null, year, month, date)
+        calendarClickData = CalendarClickData(null, year, mMonth, date)
         onCreatePager(dayOfWeek, size)
     }
 
@@ -142,9 +147,10 @@ class CalendarPagerView: ViewPager, CalendarPager {
             override fun onPageSelected(position: Int) {
                 if(onPageChangeListener != null) {
                     val fragmentCalendar = (fragmentAdapter.getItem(position) as CalendarFragmentPager).getCalendar()
+                    // 2019.12.01 return month 1 ~ 12
                     onPageChangeListener!!.onChange(
                         fragmentCalendar.get(Calendar.YEAR),
-                        fragmentCalendar.get(Calendar.MONTH)
+                        fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
                     )
                 }
 
