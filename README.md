@@ -28,7 +28,7 @@ Use the following method to show the header
 
 - version 1.1.3 release  
 calendar set month(init) value and calendar click return month value range 1 ~ 12 change  
-캘린더 초기화 값 범위, 달력 일자 클릭 시 반환되는 month 범위 1 ~ 12 로 변경
+캘린더 초기화 시 month 값 범위, 달력 일자 클릭 시 반환되는 month 범위 1 ~ 12 로 변경
 
 
 ---
