@@ -26,76 +26,75 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.1.3 release  
-calendar set month(init) value and calendar click return month value range 1 ~ 12 change  
-캘린더 초기화 시 month 값 범위, 달력 일자 클릭 시 반환되는 month 범위 1 ~ 12 로 변경
-
+- version 1.1.4 release  
+convert to java  
+코틀린 소스 -> 자바로 변환  
 
 ---
 
 ### Usage ###
-__layout.xml__
 
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.1.3'
+implementation 'com.github.parasde:SimpleDatePicker:1.1.4'
 
 ```
 
+__activity_sample.xml__
 
 ```
 
-<TextView
-    android:id="@+id/calHeader"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:textColor="@color/calHeader"
-    android:layout_marginTop="10dp"
-    android:textSize="24dp"
-    android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/calHeader2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textColor="@color/calHeader"
+        android:layout_marginTop="10dp"
+        android:textSize="24dp"
+        android:textAlignment="center"/>
 
-<com.parasde.library.simpledatepicker.view.CalendarPagerView
-    android:id="@+id/cal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-</com.parasde.library.simpledatepicker.view.CalendarPagerView>
+
+    <com.parasde.library.simpledatepicker.view.CalendarPagerView
+        android:id="@+id/cal3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.parasde.library.simpledatepicker.view.CalendarPagerView>
 
 ```
 
 ---
 
-__MainActivity.kt__
+__SampleActivity.java__
 
 ```
 // Initialize
 
-class MainActivity : AppCompatActivity() {
+public class SampleActivity extends AppCompatActivity {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private TextView header;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sample);
 
-        cal.init(this as AppCompatActivity, 2019, 12, 2, null, CalendarSize.BIG)
+        header = findViewById(R.id.calHeader2);
+        CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        // pageChange -> callback change year, month value
-        cal.setCalendarPageChangeListener(object:
-            CalendarOnPageChangeListener {
-            override fun onChange(year: Int, month: Int) {
-                if(month < 10) calHeader.text = "$year - 0${month}"
-                else calHeader.text = "$year - $month"
+        pagerView.init(this, 2019, 12, 5, null, CalendarSize.NORMAL);
+        pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
+            @Override
+            public void onChange(int year, int month) {
+                if(month < 10) header.setText(year + "-" + "0" + month);
+                else header.setText(year + "-" + month);
             }
-        })
-
-        // callback click item value
-        cal.setCalendarClickListener(object: CalendarClickListener {
-            override fun onClick(year: Int, month: Int, date: Int) {
-                Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        });
     }
+
+
 }
+
 
 
 ```
