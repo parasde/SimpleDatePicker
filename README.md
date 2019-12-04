@@ -34,6 +34,7 @@ convert to java
 
 ### Usage ###
 
+__Gradle__
 ```
 
 implementation 'com.github.parasde:SimpleDatePicker:1.1.4'
