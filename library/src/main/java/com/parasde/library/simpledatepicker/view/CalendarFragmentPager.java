@@ -38,8 +38,8 @@ public class CalendarFragmentPager extends CalendarFragment {
     }
 
     @Override
-    protected void onCreateView(@NotNull LinearLayout layout) {
-        CalendarLayoutView calLayout = new CalendarLayoutView(rootView.getContext());
+    protected void onCreate(@NotNull LinearLayout layout) {
+        CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
         layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size));
     }
