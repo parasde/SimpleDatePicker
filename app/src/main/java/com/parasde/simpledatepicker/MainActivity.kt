@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         // pageChange -> callback change year, month value
         cal.setCalendarPageChangeListener { year, month ->
+            Log.d("CalendarPageChange", "$year - $month")
             if(month < 10) calHeader.text = "$year - 0${month}"
             else calHeader.text = "$year - $month"
         }

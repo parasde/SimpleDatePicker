@@ -31,7 +31,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     }
 
     @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, getHeightMeasureSpec(widthMeasureSpec, heightMeasureSpec));
     }
 
@@ -150,13 +150,15 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
              */
             @Override
             public void onPageSelected(int position) {
-                if(onPageChangeListener != null) {
-                    Calendar fragmentCalendar = ((CalendarFragmentPager)(fragmentAdapter.getItem(position))).getCalendar();
-                    // 2019.12.01 return month 1 ~ 12
-                    onPageChangeListener.onChange(
-                            fragmentCalendar.get(Calendar.YEAR),
-                            fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
-                    );
+                if(position != 0) {
+                    if(onPageChangeListener != null) {
+                        Calendar fragmentCalendar = ((CalendarFragmentPager)(fragmentAdapter.getItem(position))).getCalendar();
+                        // 2019.12.01 return month 1 ~ 12
+                        onPageChangeListener.onChange(
+                                fragmentCalendar.get(Calendar.YEAR),
+                                fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
+                        );
+                    }
                 }
 
                 if(position == 0) { // first index..
