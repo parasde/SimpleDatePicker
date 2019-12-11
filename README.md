@@ -26,9 +26,11 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.1.4 release  
-convert to java  
-코틀린 소스 -> 자바로 변환  
+- version 1.1.5 release  
+사용되지 않는 변수 제거  
+중복 메소드명 제거  
+스와이프 시 중복해서 데이터를 주던 문제 수정  
+touchEnable 기능 추가  
 
 ---
 
@@ -37,7 +39,7 @@ convert to java
 __Gradle__
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.1.4'
+implementation 'com.github.parasde:SimpleDatePicker:1.1.5'
 
 ```
 
@@ -91,6 +93,9 @@ public class SampleActivity extends AppCompatActivity {
                 else header.setText(year + "-" + month);
             }
         });
+        
+        // touch control
+        // cal.onTouchEnable(false)
     }
 
 

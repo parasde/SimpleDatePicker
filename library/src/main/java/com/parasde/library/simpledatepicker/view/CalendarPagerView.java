@@ -214,6 +214,13 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         }
     }
 
+
+    @Override
+    public void onTouchEnable(boolean enable) {
+        swipeEnable = enable;
+    }
+
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(swipeEnable) {
@@ -222,6 +229,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
             return false;
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {

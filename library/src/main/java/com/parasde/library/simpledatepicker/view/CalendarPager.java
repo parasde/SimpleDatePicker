@@ -15,4 +15,6 @@ public interface CalendarPager {
 
     void setCalendarPageChangeListener(CalendarOnPageChangeListener listener);
     void setCalendarClickListener(CalendarClickListener listener);
+
+    void onTouchEnable(boolean enable);
 }

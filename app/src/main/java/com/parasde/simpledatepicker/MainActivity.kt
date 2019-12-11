@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
             else calHeader.text = "$year - $month"
         }
 
+        cal.onTouchEnable(false)
+
         // callback click item value
         cal.setCalendarClickListener { year, month, date -> Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show() }
 
