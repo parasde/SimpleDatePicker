@@ -14,7 +14,7 @@ import com.parasde.library.simpledatepicker.R;
 
 abstract class CalendarFragment extends Fragment {
     protected abstract int layoutResId();
-    protected abstract void onCreate(LinearLayout layout);
+    protected abstract void initLayout(LinearLayout layout);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,6 @@ abstract class CalendarFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        onCreate((LinearLayout) view.findViewById(R.id.calendarLayout));
+        initLayout((LinearLayout) view.findViewById(R.id.calendarLayout));
     }
 }
