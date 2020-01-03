@@ -61,6 +61,11 @@ __activity_sample.xml__
         android:layout_height="wrap_content">
 
     </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+    <com.parasde.library.simpleweeklypicker.view.WeeklyPagerView
+        android:id="@+id/weekly2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.parasde.library.simpleweeklypicker.view.WeeklyPagerView>
 
 ```
 
