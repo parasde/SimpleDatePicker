@@ -86,6 +86,21 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         calendarOnClickListener = listener;
     }
 
+    @Override
+    public int getClickYear() {
+        return calendarClickData.getYear();
+    }
+
+    @Override
+    public int getClickMonth() {
+        return calendarClickData.getMonth()+1;
+    }
+
+    @Override
+    public int getClickDate() {
+        return calendarClickData.getDate();
+    }
+
     // initialize pager, add calendar fragment + draw calendar
     @Override
     public void init(@NotNull AppCompatActivity activity, @Nullable String[] dayOfWeek, CalendarSize size) {
@@ -120,6 +135,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
 
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
+        calendar.set(Calendar.DATE, date);
         prevCalendar = prevMonthCalendar();
         nextCalendar = nextMonthCalendar();
 

@@ -27,7 +27,11 @@ Use the following method to show the header
 ### note ###
 
 - version 1.2.5 release  
-weekly picker 추가  
+WeeklyPicker 추가  
+DatePicker pager 메소드 추가   
+ - getClickYear
+ - getClickMonth
+ - getClickDate
 ---
 
 ### Usage ###

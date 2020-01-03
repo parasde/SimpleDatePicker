@@ -24,10 +24,13 @@ class MainActivity : AppCompatActivity() {
             else calHeader.text = "$year - $month"
         }
 
-        cal.onTouchEnable(false)
+//        cal.onTouchEnable(false)
 
         // callback click item value
-        cal.setCalendarClickListener { year, month, date -> Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show() }
+        cal.setCalendarClickListener { year, month, date ->
+//            Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show()
+            Log.e("cal info", "${cal.clickYear}, ${cal.clickMonth}, ${cal.clickDate}")
+        }
 
 
         val dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
