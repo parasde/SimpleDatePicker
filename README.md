@@ -1,7 +1,7 @@
-## SimpleDatePicker ##
+## SimpleDatePicker
 
 
-### Overview ###
+### Overview
 
 안드로이드 용 날짜 선택 라이브러리 (샘플 소스 포함)
 
@@ -15,7 +15,7 @@ you can download and run this source.
   
    
   
-이 라이브러리는 년/월을 표시해주는 헤더가 없기 때문에 따로 TextView 등의 위젯을 추가하여 보여줘야한다.
+*이 라이브러리는 년/월을 표시해주는 헤더가 없기때문에 직접추가해야한다.
 
 this library not include calendar header(Year-Month)  
 Use the following method to show the header  
@@ -24,7 +24,7 @@ Use the following method to show the header
 
 ---
 
-### note ###
+### note
 
 - version 1.2.5 release  
 WeeklyPicker 추가  
@@ -34,13 +34,11 @@ DatePicker pager 메소드 추가
  - getClickDate
 ---
 
-### Usage ###
+### Usage
 
 __Gradle__
 ```
-
 implementation 'com.github.parasde:SimpleDatePicker:1.2.5'
-
 ```
 
 __activity_sample.xml__
