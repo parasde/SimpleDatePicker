@@ -28,7 +28,7 @@ Use the following method to show the header
 
 version 1.2.5 release  
 WeeklyPicker 추가  
-DatePicker pager 메소드 추가   
+DatePicker 메소드 추가   
  - getClickYear
  - getClickMonth
  - getClickDate
