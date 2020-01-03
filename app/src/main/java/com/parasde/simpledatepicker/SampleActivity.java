@@ -1,6 +1,7 @@
 package com.parasde.simpledatepicker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener;
 import com.parasde.library.simpledatepicker.view.CalendarPagerView;
+import com.parasde.library.simpleweeklypicker.data.WeeklyData;
+import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation;
+import com.parasde.library.simpleweeklypicker.data.WeeklySize;
+import com.parasde.library.simpleweeklypicker.listener.WeeklyClickListener;
+import com.parasde.library.simpleweeklypicker.listener.WeeklyOnPageChangeListener;
+import com.parasde.library.simpleweeklypicker.view.WeeklyPagerView;
+
+import java.util.List;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -27,6 +36,25 @@ public class SampleActivity extends AppCompatActivity {
             public void onChange(int year, int month) {
                 if(month < 10) header.setText(year + "-" + "0" + month);
                 else header.setText(year + "-" + month);
+            }
+        });
+
+
+        WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);
+        weeklyPagerView.init(this, null, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL);
+        weeklyPagerView.setWeeklyClickListener(new WeeklyClickListener() {
+            @Override
+            public void onClick(int year, int month, int date) {
+                Log.i("Weekly Click", year + ", " + month + ", " + date);
+            }
+        });
+        weeklyPagerView.setWeeklyPageChangeListener(new WeeklyOnPageChangeListener() {
+            @Override
+            public void onChange(List<WeeklyData> weeklyData) {
+                for(WeeklyData data: weeklyData) {
+                    Log.i("Weekly Info", data.getYear() + "-" + data.getMonth() + "-" + data.getDate());
+                    Log.i("week of month", data.getWeekOfMonth() + "");
+                }
             }
         });
     }

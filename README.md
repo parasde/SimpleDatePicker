@@ -26,12 +26,8 @@ Use the following method to show the header
 
 ### note ###
 
-- version 1.1.5 release  
-사용되지 않는 변수 제거  
-중복 메소드명 제거  
-스와이프 시 중복해서 데이터를 주던 문제 수정  
-touchEnable 기능 추가  
-
+- version 1.2.5 release  
+weekly picker 추가  
 ---
 
 ### Usage ###
@@ -39,7 +35,7 @@ touchEnable 기능 추가
 __Gradle__
 ```
 
-implementation 'com.github.parasde:SimpleDatePicker:1.1.5'
+implementation 'com.github.parasde:SimpleDatePicker:1.2.5'
 
 ```
 
@@ -96,6 +92,24 @@ public class SampleActivity extends AppCompatActivity {
         
         // touch control
         // cal.onTouchEnable(false)
+        
+        WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);
+        weeklyPagerView.init(this, null, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL);
+        weeklyPagerView.setWeeklyClickListener(new WeeklyClickListener() {
+            @Override
+            public void onClick(int year, int month, int date) {
+                Log.i("Weekly Click", year + ", " + month + ", " + date);
+            }
+        });
+        weeklyPagerView.setWeeklyPageChangeListener(new WeeklyOnPageChangeListener() {
+            @Override
+            public void onChange(List<WeeklyData> weeklyData) {
+                for(WeeklyData data: weeklyData) {
+                    Log.i("Weekly Info", data.getYear() + "-" + data.getMonth() + "-" + data.getDate());
+                    Log.i("week of month", data.getWeekOfMonth() + "");
+                }
+            }
+        });
     }
 
 

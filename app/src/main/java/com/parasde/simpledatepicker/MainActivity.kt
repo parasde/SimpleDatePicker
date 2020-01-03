@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.parasde.library.simpledatepicker.data.CalendarSize
-import com.parasde.library.simpledatepicker.listener.CalendarClickListener
-import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener
+import com.parasde.library.simpleweeklypicker.data.WeeklyData
+import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation
+import com.parasde.library.simpleweeklypicker.data.WeeklySize
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         cal.init(this as AppCompatActivity, 2019, 12, 2, null, CalendarSize.BIG)
 
         // pageChange -> callback change year, month value
@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         val dayOfWeek: Array<String> = arrayOf("일", "월", "화", "수", "목", "금", "토")
 
         // scroll bar calendar test
-        cal2.init(this as AppCompatActivity, dayOfWeek, null)
+//        cal2.init(this as AppCompatActivity, dayOfWeek, null)
+
+        // weekly
+        weekly.init(this as AppCompatActivity, 2020, 2, 20, dayOfWeek, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL)
+        weekly.setWeeklyClickListener { year, month, date -> Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show() }
+        weekly.setWeeklyPageChangeListener { data -> Log.i("Weekly", "Prev weekly : ${data[0].weekOfMonth}\nCur weekly: ${data[6].weekOfMonth}") }
     }
 }
