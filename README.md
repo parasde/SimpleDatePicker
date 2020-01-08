@@ -26,19 +26,15 @@ Use the following method to show the header
 
 ### note
 
-version 1.2.5 release  
-WeeklyPicker 추가  
-DatePicker 메소드 추가   
- - getClickYear
- - getClickMonth
- - getClickDate
+version 1.2.6 release  
+WeeklyPicker 년, 월, 일 을 모두 사용하여 초기화 시 해당 날짜 마커 추가    
 ---
 
 ### Usage
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.2.5'
+implementation 'com.github.parasde:SimpleDatePicker:1.2.6'
 ```
 
 __activity_sample.xml__

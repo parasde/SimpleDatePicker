@@ -4,9 +4,9 @@ import android.widget.TextView;
 
 public class CalendarClickData {
     private TextView tv = null;
-    private int year = -1;
-    private int month = -1;
-    private int date = -1;
+    private int year;
+    private int month;
+    private int date;
 
     public CalendarClickData() { }
 

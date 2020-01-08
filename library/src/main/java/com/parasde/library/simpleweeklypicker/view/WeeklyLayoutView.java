@@ -111,7 +111,7 @@ public class WeeklyLayoutView implements WeeklyLayout {
 
     // click date check
     private boolean clickDataCheck(int year, int month, int date) {
-        return weeklyClickData.getYear() == year && weeklyClickData.getMonth()-1 == month && weeklyClickData.getDate() == date;
+        return weeklyClickData.getYear() == year && weeklyClickData.getMonth() == month && weeklyClickData.getDate() == date;
     }
 
     private class CalendarDateOnClick implements View.OnClickListener {
