@@ -27,7 +27,8 @@ Use the following method to show the header
 ### note
 
 version 1.2.6 release  
-WeeklyPicker 년, 월, 일 을 모두 사용하여 초기화 시 해당 날짜 마커 추가    
+WeeklyPicker 년, 월, 일 을 모두 사용하여 초기화 시 해당 날짜 마커 추가  
+
 ---
 
 ### Usage
