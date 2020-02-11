@@ -26,8 +26,8 @@ Use the following method to show the header
 
 ### note
 
-version 1.2.6 release  
-WeeklyPicker 년, 월, 일 을 모두 사용하여 초기화 시 해당 날짜 마커 추가  
+version 1.2.7 release  
+CalendarPicker, WeeklyPicker init 중복호출 시 날짜가 비정상적으로 나오던 문제 수정  
 
 ---
 
@@ -35,7 +35,7 @@ WeeklyPicker 년, 월, 일 을 모두 사용하여 초기화 시 해당 날짜 �
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.2.6'
+implementation 'com.github.parasde:SimpleDatePicker:1.2.7'
 ```
 
 __activity_sample.xml__

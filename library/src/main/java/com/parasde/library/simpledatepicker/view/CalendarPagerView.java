@@ -22,12 +22,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Calendar;
 
 public class CalendarPagerView extends ViewPager implements CalendarPager {
+    private CalendarPagerAdapterChangeListener calendarPagerAdapterChangeListener = new CalendarPagerAdapterChangeListener();
+
     public CalendarPagerView(@NonNull Context context) {
         super(context);
+        // add Page Change Listener
+        this.addOnPageChangeListener(calendarPagerAdapterChangeListener);
     }
 
     public CalendarPagerView(@NonNull Context context, @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
+        // add Page Change Listener
+        this.addOnPageChangeListener(calendarPagerAdapterChangeListener);
     }
 
     @Override
@@ -35,6 +41,50 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         super.onMeasure(widthMeasureSpec, getHeightMeasureSpec(widthMeasureSpec, heightMeasureSpec));
     }
 
+    private class CalendarPagerAdapterChangeListener implements OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        /**
+         * left and right swipe pager selected listener
+         * first index pager -> prev month calendar fragment add and remake adapter
+         * last index pager -> next month calendar fragment add and notifyDataSetChanged . apply
+         */
+        @Override
+        public void onPageSelected(int position) {
+            if(position != 0) {
+                if(onPageChangeListener != null) {
+                    Calendar fragmentCalendar = ((CalendarFragmentPager)(fragmentAdapter.getItem(position))).getCalendar();
+                    // 2019.12.01 return month 1 ~ 12
+                    onPageChangeListener.onChange(
+                            fragmentCalendar.get(Calendar.YEAR),
+                            fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
+                    );
+                }
+            }
+
+            if(position == 0) { // first index..
+                // left swipe
+                calendar.add(Calendar.MONTH, -1);
+                minPrevMonth();
+                fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize), "$position");
+                CalendarPagerView.super.invalidate();
+                CalendarPagerView.super.setCurrentItem(position+1, false);
+            } else if(position == fragmentAdapter.getCount()-1) {    // last index..
+                // right swipe
+                calendar.add(Calendar.MONTH, 2);
+                addNextMonth();
+                fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize), "$position");
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
 
     private Calendar calendar = (Calendar)Calendar.getInstance().clone();
     private Calendar prevCalendar = prevMonthCalendar();
@@ -49,7 +99,11 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
 
     private CalendarClickData calendarClickData;
 
+    private CalendarSize calendarSize = CalendarSize.NORMAL;
+
     private boolean swipeEnable = true;
+
+    private String[] dayOfWeek = null;
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -143,7 +197,10 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         onCreatePager(dayOfWeek, size);
     }
 
-    private void onCreatePager(final String[] dayOfWeek, final CalendarSize size) {
+    private void onCreatePager(final String[] dayOfWeek, CalendarSize size) {
+        this.dayOfWeek = dayOfWeek;
+        this.calendarSize = size;
+
         FragmentManager fragment = activity.getSupportFragmentManager();
         fragmentAdapter = new CalendarFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
@@ -152,51 +209,6 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, size), "2");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
-
-        this.addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            /**
-             * left and right swipe pager selected listener
-             * first index pager -> prev month calendar fragment add and remake adapter
-             * last index pager -> next month calendar fragment add and notifyDataSetChanged . apply
-             */
-            @Override
-            public void onPageSelected(int position) {
-                if(position != 0) {
-                    if(onPageChangeListener != null) {
-                        Calendar fragmentCalendar = ((CalendarFragmentPager)(fragmentAdapter.getItem(position))).getCalendar();
-                        // 2019.12.01 return month 1 ~ 12
-                        onPageChangeListener.onChange(
-                                fragmentCalendar.get(Calendar.YEAR),
-                                fragmentCalendar.get(Calendar.MONTH)+1  // return - 1 ~ 12 month
-                        );
-                    }
-                }
-
-                if(position == 0) { // first index..
-                    // left swipe
-                    calendar.add(Calendar.MONTH, -1);
-                    minPrevMonth();
-                    fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, size), "$position");
-                    CalendarPagerView.super.invalidate();
-                    CalendarPagerView.super.setCurrentItem(position+1, false);
-                } else if(position == fragmentAdapter.getCount()-1) {    // last index..
-                    // right swipe
-                    calendar.add(Calendar.MONTH, 2);
-                    addNextMonth();
-                    fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, size), "$position");
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     // initialize prev month calendar

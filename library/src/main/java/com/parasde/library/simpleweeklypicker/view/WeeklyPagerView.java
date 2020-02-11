@@ -29,12 +29,18 @@ import java.util.Calendar;
  * Copy SimpleDatePicker
  */
 public class WeeklyPagerView extends ViewPager implements WeeklyPager {
+    private WeeklyPagerAdapterChangerListener weeklyPagerAdapterChangerListener = new WeeklyPagerAdapterChangerListener();
+
     public WeeklyPagerView(@NonNull Context context) {
         super(context);
+        // add Page Change Listener
+        this.addOnPageChangeListener(weeklyPagerAdapterChangerListener);
     }
 
     public WeeklyPagerView(@NonNull Context context, @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
+        // add Page Change Listener
+        this.addOnPageChangeListener(weeklyPagerAdapterChangerListener);
     }
 
     @Override
@@ -59,6 +65,46 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         }
     }
 
+    /**
+     * Page Change Listener
+     */
+    private class WeeklyPagerAdapterChangerListener implements OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if(position != 0) {
+                if(onPageChangeListener != null) {
+                    ArrayList<WeeklyData> fragmentWeeklyData = ((WeeklyFragmentPager)(fragmentAdapter.getItem(position))).getWeeklyData();
+                    onPageChangeListener.onChange(fragmentWeeklyData);
+                }
+            }
+
+            if(position == 0) { // first index..
+                // left swipe
+                prevCalendar.add(Calendar.DATE, -7);
+                prevWeeklyData = getPrevWeeklyData(prevCalendar);
+                minPage--;
+                fragmentAdapter.addPrevItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), minPage + "");
+                WeeklyPagerView.super.invalidate();
+                WeeklyPagerView.super.setCurrentItem(position+1, false);
+            } else if(position == fragmentAdapter.getCount()-1) {    // last index..
+                // right swipe
+                nextCalendar.add(Calendar.DATE, 7);
+                nextWeeklyData = getNextWeeklyData(nextCalendar);
+                maxPage++;
+                fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), maxPage + "");
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
 
     private Calendar calendar = (Calendar)Calendar.getInstance().clone();
     private Calendar prevCalendar = (Calendar) calendar.clone();
@@ -71,9 +117,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
 
     private WeeklyOnPageChangeListener onPageChangeListener = null;
     private WeeklyDateOnClick onClickListener = new WeeklyDateOnClick();
-
     private WeeklyClickListener weeklyClickListener = null;
-
     private WeeklyClickData weeklyClickData;
 
     private boolean swipeEnable = true;
@@ -82,6 +126,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     private WeeklySize weeklySize = WeeklySize.NORMAL;
 
     private int maxPage = 2, minPage;
+    private String[] dayOfWeek = null;
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -162,7 +207,9 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         onCreatePager(dayOfWeek);
     }
 
-    private void onCreatePager(final String[] dayOfWeek) {
+    private void onCreatePager(String[] dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+
         if(orientation == WeeklyOrientation.VERTICAL) {
             setPageTransformer(true, new VerticalPager());
         }
@@ -179,44 +226,6 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), "next");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
-
-        this.addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if(position != 0) {
-                    if(onPageChangeListener != null) {
-                        ArrayList<WeeklyData> fragmentWeeklyData = ((WeeklyFragmentPager)(fragmentAdapter.getItem(position))).getWeeklyData();
-                        onPageChangeListener.onChange(fragmentWeeklyData);
-                    }
-                }
-
-                if(position == 0) { // first index..
-                    // left swipe
-                    prevCalendar.add(Calendar.DATE, -7);
-                    prevWeeklyData = getPrevWeeklyData(prevCalendar);
-                    minPage--;
-                    fragmentAdapter.addPrevItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), minPage + "");
-                    WeeklyPagerView.super.invalidate();
-                    WeeklyPagerView.super.setCurrentItem(position+1, false);
-                } else if(position == fragmentAdapter.getCount()-1) {    // last index..
-                    // right swipe
-                    nextCalendar.add(Calendar.DATE, 7);
-                    nextWeeklyData = getNextWeeklyData(nextCalendar);
-                    maxPage++;
-                    fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), maxPage + "");
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     // initialize current month calendar
@@ -294,6 +303,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 date++;
             }
         }
+
         return weeklyDataArrayList;
     }
 
