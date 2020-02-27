@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.parasde.library.simpledatepicker.data.CalendarMemo;
 import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener;
 import com.parasde.library.simpledatepicker.view.CalendarPagerView;
@@ -16,6 +17,7 @@ import com.parasde.library.simpleweeklypicker.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyOnPageChangeListener;
 import com.parasde.library.simpleweeklypicker.view.WeeklyPagerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SampleActivity extends AppCompatActivity {
@@ -30,7 +32,7 @@ public class SampleActivity extends AppCompatActivity {
         header = findViewById(R.id.calHeader2);
         CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        pagerView.init(this, 2019, 12, 5, null, CalendarSize.NORMAL);
+        pagerView.init(this, 2020, 2, 26, null, CalendarSize.NORMAL);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -38,6 +40,18 @@ public class SampleActivity extends AppCompatActivity {
                 else header.setText(year + "-" + month);
             }
         });
+
+        pagerView.setBackgroundColorOnClick("#fff780");
+        ArrayList<CalendarMemo> memoList = new ArrayList<>();
+        memoList.add(new CalendarMemo(2020, 2, 25, "Hello World, Hello World"));
+        memoList.add(new CalendarMemo(2020, 2, 25, "0225"));
+        memoList.add(new CalendarMemo(2020, 2, 25, "0225"));
+
+        memoList.add(new CalendarMemo(2020, 2, 26, "World"));
+        memoList.add(new CalendarMemo(2020, 2, 27, "Hello"));
+        memoList.add(new CalendarMemo(2020, 2, 27, "CalendarPicker"));
+        pagerView.setMemo(memoList);
+        pagerView.apply();
 
 
         WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);

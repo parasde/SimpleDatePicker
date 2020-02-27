@@ -1,7 +1,8 @@
 package com.parasde.library.simpledatepicker.view;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import com.parasde.library.simpledatepicker.R;
 import com.parasde.library.simpledatepicker.data.CalendarClickData;
 import com.parasde.library.simpledatepicker.data.CalendarData;
+import com.parasde.library.simpledatepicker.data.CalendarMemo;
 import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 
@@ -28,6 +30,9 @@ public class CalendarLayoutView implements CalendarLayout {
     private ArrayList<CalendarData> calendarData;
 
     private Context context;
+    private String colorHex;
+
+    private final String numberRegExp = "^[0-9]+$";
 
     CalendarLayoutView(Context context) {
         this.context = context;
@@ -39,10 +44,26 @@ public class CalendarLayoutView implements CalendarLayout {
     }
 
     @Override
-    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, CalendarSize size) {
+    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, CalendarSize size,
+                                     ArrayList<CalendarMemo> memoItems, String colorHex) {
         Calendar calendar = (Calendar) cal.clone();
         calendarData = new ArrayList<>();
         this.calendarClickData = calendarClickData;
+        int curYear = cal.get(Calendar.YEAR);
+        int curMonth = cal.get(Calendar.MONTH)+1;
+
+        ArrayList<CalendarMemo> filterMemoItems = new ArrayList<>();
+        if(memoItems != null) {
+            for(CalendarMemo memo: memoItems) {
+                int memoYear = memo.getYear();
+                int memoMonth = memo.getMonth();
+                if(curYear == memoYear && curMonth == memoMonth) {
+                    filterMemoItems.add(memo);
+                }
+            }
+        }
+
+        this.colorHex = colorHex;
 
         if(weekDay != null && weekDay.length == 7) {
             dayOfWeek = weekDay;
@@ -85,16 +106,62 @@ public class CalendarLayoutView implements CalendarLayout {
         }
 
         for(int i = 0; i < dateArray.size(); i++) {
-            TextView tv = new TextView(context);
-            tv.setText(dateArray.get(i));
+            LinearLayout tvLinear = new LinearLayout(context);
+            tvLinear.setOrientation(LinearLayout.VERTICAL);
+            // set Linear Layout
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
             );
             params.height = size.colSize();
-            tv.setLayoutParams(params);
+            tvLinear.setLayoutParams(params);
+            tvLinear.setPadding(3, 8, 3, 8);
+
+            TextView memoTv = new TextView(context);
+            // set TextView
+            LinearLayout.LayoutParams memoTvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            memoTvParam.weight = 1;
+
+            memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
+            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12f);
+            if(dateArray.get(i).matches(numberRegExp)) {
+                int memoCount = 0;
+                for(CalendarMemo memo: filterMemoItems) {
+                    int memoYear = memo.getYear();
+                    int memoMonth = memo.getMonth();
+                    int memoDate = memo.getDate();
+                    if(curYear == memoYear && curMonth == memoMonth && memoDate == Integer.parseInt(dateArray.get(i))) {
+                        memoCount++;
+                        String text = memo.getContent();
+                        if(text.length() > 5) {
+                            text = text.substring(0, 5) + "...";
+                        }
+                        text += "\n" + memoTv.getText().toString();
+                        memoTv.setText(text);
+                        if(size == CalendarSize.BIG) {
+                            if(memoCount == 2) {
+                                break;
+                            }
+                        } else {
+                            if(memoCount == 1) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            TextView tv = new TextView(context);
+            tv.setText(dateArray.get(i));
+            // set TextView
+            LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            tv.setLayoutParams(tvParam);
+
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tv.setGravity(Gravity.CENTER_VERTICAL);
+//            tv.setGravity(Gravity.CENTER_VERTICAL);
 
             if(i == 0) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
@@ -109,12 +176,20 @@ public class CalendarLayoutView implements CalendarLayout {
                 }
 
                 if(clickDataCheck(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-                    tv.setBackgroundResource(R.color.skyBlue);
-                    calendarClickData.setTv(tv);
+//                    tv.setBackgroundResource(R.color.skyBlue);
+                    if(colorHex != null) {
+                        tvLinear.setBackgroundColor(Color.parseColor(colorHex));
+                    } else {
+                        tvLinear.setBackgroundResource(R.color.skyBlue);
+                    }
+                    calendarClickData.setLayout(tvLinear);
                 }
             }
 
-            gridLayout.addView(tv);
+//            gridLayout.addView(tv);
+            tvLinear.addView(tv);
+            tvLinear.addView(memoTv);
+            gridLayout.addView(tvLinear);
         }
 
         return gridLayout;
@@ -142,14 +217,18 @@ public class CalendarLayoutView implements CalendarLayout {
         @Override
         public void onClick(View view) {
             if(calendarClickListener != null)  {
-                if(calendarClickData.getTv() != null) {
-                    calendarClickData.getTv().setBackgroundResource(android.R.color.transparent);
+                if(calendarClickData.getLayout() != null) {
+                    calendarClickData.getLayout().setBackgroundResource(android.R.color.transparent);
                 }
 
-                view.setBackgroundResource(R.color.skyBlue);
+                if(colorHex != null) {
+                    ((LinearLayout)view.getParent()).setBackgroundColor(Color.parseColor(colorHex));
+                } else {
+                    ((LinearLayout)view.getParent()).setBackgroundResource(R.color.skyBlue);
+                }
 
                 // click date set
-                calendarClickData.setTv((TextView)view);
+                calendarClickData.setLayout(((LinearLayout)view.getParent()));
                 calendarClickData.setYear(calendarData.get(position).getYear());
                 calendarClickData.setMonth(calendarData.get(position).getMonth());
                 calendarClickData.setDate(calendarData.get(position).getDate());

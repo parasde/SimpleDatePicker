@@ -1,29 +1,16 @@
 package com.parasde.library.simpledatepicker.data;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-public class CalendarClickData {
-    private LinearLayout layout = null;
+public class CalendarMemo {
     private int year;
     private int month;
     private int date;
+    private String content;
 
-    public CalendarClickData() { }
-
-    public CalendarClickData(LinearLayout layout, int year, int month, int date) {
-        this.layout = layout;
+    public CalendarMemo(int year, int month, int date, String content) {
         this.year = year;
         this.month = month;
         this.date = date;
-    }
-
-    public LinearLayout getLayout() {
-        return layout;
-    }
-
-    public void setLayout(LinearLayout layout) {
-        this.layout = layout;
+        this.content = content;
     }
 
     public int getYear() {
@@ -48,5 +35,13 @@ public class CalendarClickData {
 
     public void setDate(int date) {
         this.date = date;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -4,11 +4,13 @@ import android.widget.LinearLayout;
 
 import com.parasde.library.simpledatepicker.R;
 import com.parasde.library.simpledatepicker.data.CalendarClickData;
+import com.parasde.library.simpledatepicker.data.CalendarMemo;
 import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalendarFragmentPager extends CalendarFragment {
@@ -19,12 +21,18 @@ public class CalendarFragmentPager extends CalendarFragment {
 
     private Calendar cal;
 
-    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay, CalendarSize size) {
+    private ArrayList<CalendarMemo> memoItems;
+    private String colorHex;
+
+    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay,
+                          CalendarSize size, ArrayList<CalendarMemo> memoItems, String colorHex) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;
         this.weekDay = weekDay;
         this.size = size;
         this.cal = (Calendar)cal.clone();
+        this.memoItems = memoItems;
+        this.colorHex = colorHex;
     }
 
     // select pager calendar
@@ -41,6 +49,6 @@ public class CalendarFragmentPager extends CalendarFragment {
     protected void initLayout(@NotNull LinearLayout layout) {
         CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size));
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size, memoItems, colorHex));
     }
 }

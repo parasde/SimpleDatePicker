@@ -1,9 +1,9 @@
 package com.parasde.library.simpledatepicker.data;
 
 public enum CalendarSize {
-    SMALL(84),
-    NORMAL(108),
-    BIG(144);
+    SMALL(100),
+    NORMAL(140),
+    BIG(180);
 
     private int size;
 
