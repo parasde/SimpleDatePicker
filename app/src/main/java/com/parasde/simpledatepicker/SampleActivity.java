@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.parasde.library.simpledatepicker.data.CalendarMemo;
 import com.parasde.library.simpledatepicker.data.CalendarSize;
+import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener;
 import com.parasde.library.simpledatepicker.view.CalendarPagerView;
 import com.parasde.library.simpleweeklypicker.data.WeeklyData;
@@ -32,12 +33,19 @@ public class SampleActivity extends AppCompatActivity {
         header = findViewById(R.id.calHeader2);
         CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        pagerView.init(this, 2020, 2, 26, null, CalendarSize.NORMAL);
+        pagerView.init(this, 2020, 2, 26, null, CalendarSize.SMALL);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
                 if(month < 10) header.setText(year + "-" + "0" + month);
                 else header.setText(year + "-" + month);
+            }
+        });
+
+        pagerView.setCalendarClickListener(new CalendarClickListener() {
+            @Override
+            public void onClick(int year, int month, int date) {
+                Log.d("Calendar Click", year + "-" + month + "-" + date);
             }
         });
 

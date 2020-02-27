@@ -124,8 +124,8 @@ public class CalendarLayoutView implements CalendarLayout {
 
             memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
-            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12f);
-            if(dateArray.get(i).matches(numberRegExp)) {
+            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11f);
+            if(dateArray.get(i).matches(numberRegExp) && size != CalendarSize.SMALL) {
                 int memoCount = 0;
                 for(CalendarMemo memo: filterMemoItems) {
                     int memoYear = memo.getYear();
@@ -159,7 +159,7 @@ public class CalendarLayoutView implements CalendarLayout {
             LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             tv.setLayoutParams(tvParam);
 
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17f);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //            tv.setGravity(Gravity.CENTER_VERTICAL);
 
@@ -169,7 +169,9 @@ public class CalendarLayoutView implements CalendarLayout {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
             } else if(i >= (blankDate+7)) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
-                tv.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
+
+                tvLinear.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
+
                 calendarData.add(new CalendarData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i))));
                 if(checkSunday(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
                     tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
@@ -222,13 +224,13 @@ public class CalendarLayoutView implements CalendarLayout {
                 }
 
                 if(colorHex != null) {
-                    ((LinearLayout)view.getParent()).setBackgroundColor(Color.parseColor(colorHex));
+                    view.setBackgroundColor(Color.parseColor(colorHex));
                 } else {
-                    ((LinearLayout)view.getParent()).setBackgroundResource(R.color.skyBlue);
+                    view.setBackgroundResource(R.color.skyBlue);
                 }
 
                 // click date set
-                calendarClickData.setLayout(((LinearLayout)view.getParent()));
+                calendarClickData.setLayout((LinearLayout)view);
                 calendarClickData.setYear(calendarData.get(position).getYear());
                 calendarClickData.setMonth(calendarData.get(position).getMonth());
                 calendarClickData.setDate(calendarData.get(position).getDate());
