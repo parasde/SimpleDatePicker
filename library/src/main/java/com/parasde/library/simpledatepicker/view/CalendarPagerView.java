@@ -2,6 +2,7 @@ package com.parasde.library.simpledatepicker.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -71,14 +72,14 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
                 // left swipe
                 calendar.add(Calendar.MONTH, -1);
                 minPrevMonth();
-                fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex), "$position");
+                fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex, memoFontSize, calendarFontSize), "$position");
                 CalendarPagerView.super.invalidate();
                 CalendarPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
                 // right swipe
                 calendar.add(Calendar.MONTH, 2);
                 addNextMonth();
-                fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex), "$position");
+                fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex, memoFontSize, calendarFontSize), "$position");
             }
         }
 
@@ -109,6 +110,8 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
 
     private ArrayList<CalendarMemo> memoItems = null;
     private String colorHex = null;
+    private float memoFontSize = 10f;
+    private float calendarFontSize = 17f;
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -143,6 +146,22 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     @Override
     public void setCalendarClickListener(@NonNull CalendarClickListener listener) {
         calendarOnClickListener = listener;
+    }
+
+    @Override
+    public void setCalendarFontSize(float size) {
+        if(size > 0 && size <= 18) {
+            calendarFontSize = size;
+        }
+        Log.e("SetFontSize Fail", "Calendar FontSize Range : 1~18");
+    }
+
+    @Override
+    public void setMemoFontSize(float size) {
+        if(size > 0 && size <= 10) {
+            memoFontSize = size;
+        }
+        Log.e("SetFontSize Fail", "Memo FontSize Range : 1~10");
     }
 
     @Override
@@ -229,9 +248,9 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         FragmentManager fragment = activity.getSupportFragmentManager();
         fragmentAdapter = new CalendarFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        fragmentAdapter.addItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex), "0");
-        fragmentAdapter.addItem(new CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex), "1");
-        fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex), "2");
+        fragmentAdapter.addItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex, memoFontSize, calendarFontSize), "0");
+        fragmentAdapter.addItem(new CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex, memoFontSize, calendarFontSize), "1");
+        fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, calendarSize, memoItems, colorHex, memoFontSize, calendarFontSize), "2");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }

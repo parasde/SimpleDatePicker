@@ -33,7 +33,7 @@ public class SampleActivity extends AppCompatActivity {
         header = findViewById(R.id.calHeader2);
         CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        pagerView.init(this, 2020, 2, 26, null, CalendarSize.SMALL);
+        pagerView.init(this, 2020, 2, 26, null, CalendarSize.BIG);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -59,6 +59,8 @@ public class SampleActivity extends AppCompatActivity {
         memoList.add(new CalendarMemo(2020, 2, 27, "Hello"));
         memoList.add(new CalendarMemo(2020, 2, 27, "CalendarPicker"));
         pagerView.setMemo(memoList);
+        pagerView.setCalendarFontSize(18);
+        pagerView.setMemoFontSize(11);
         pagerView.apply();
 
 

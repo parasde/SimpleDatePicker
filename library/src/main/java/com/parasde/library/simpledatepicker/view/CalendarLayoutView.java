@@ -2,6 +2,7 @@ package com.parasde.library.simpledatepicker.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.GridLayout;
@@ -45,7 +46,7 @@ public class CalendarLayoutView implements CalendarLayout {
 
     @Override
     public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, CalendarSize size,
-                                     ArrayList<CalendarMemo> memoItems, String colorHex) {
+                                     ArrayList<CalendarMemo> memoItems, String colorHex, float memoFontSize, float calendarFontSize) {
         Calendar calendar = (Calendar) cal.clone();
         calendarData = new ArrayList<>();
         this.calendarClickData = calendarClickData;
@@ -124,7 +125,7 @@ public class CalendarLayoutView implements CalendarLayout {
 
             memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
-            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11f);
+            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
             if(dateArray.get(i).matches(numberRegExp) && size != CalendarSize.SMALL) {
                 int memoCount = 0;
                 for(CalendarMemo memo: filterMemoItems) {
@@ -159,7 +160,8 @@ public class CalendarLayoutView implements CalendarLayout {
             LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             tv.setLayoutParams(tvParam);
 
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17f);
+            Log.e("Font size", calendarFontSize + " , " + memoFontSize);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, calendarFontSize);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //            tv.setGravity(Gravity.CENTER_VERTICAL);
 

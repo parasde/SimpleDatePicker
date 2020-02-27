@@ -22,6 +22,8 @@ public interface CalendarPager {
     void setCalendarPageChangeListener(CalendarOnPageChangeListener listener);
     void setCalendarClickListener(CalendarClickListener listener);
 
+    void setCalendarFontSize(float size);
+    void setMemoFontSize(float size);
     void apply();
 
     int getClickYear();

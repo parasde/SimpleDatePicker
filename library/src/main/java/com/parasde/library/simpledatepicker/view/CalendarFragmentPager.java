@@ -23,9 +23,10 @@ public class CalendarFragmentPager extends CalendarFragment {
 
     private ArrayList<CalendarMemo> memoItems;
     private String colorHex;
+    private float memoFontSize, calendarFontSize;
 
     CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay,
-                          CalendarSize size, ArrayList<CalendarMemo> memoItems, String colorHex) {
+                          CalendarSize size, ArrayList<CalendarMemo> memoItems, String colorHex, float memoFontSize, float calendarFontSize) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;
         this.weekDay = weekDay;
@@ -33,6 +34,8 @@ public class CalendarFragmentPager extends CalendarFragment {
         this.cal = (Calendar)cal.clone();
         this.memoItems = memoItems;
         this.colorHex = colorHex;
+        this.memoFontSize = memoFontSize;
+        this.calendarFontSize = calendarFontSize;
     }
 
     // select pager calendar
@@ -49,6 +52,6 @@ public class CalendarFragmentPager extends CalendarFragment {
     protected void initLayout(@NotNull LinearLayout layout) {
         CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size, memoItems, colorHex));
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size, memoItems, colorHex,  memoFontSize, calendarFontSize));
     }
 }
