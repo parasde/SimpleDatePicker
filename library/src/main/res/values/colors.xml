@@ -8,6 +8,7 @@
     <color name="calHeader">#262626</color>
     <color name="calDate">#363636</color>
     <color name="calSunday">#E34646</color>
+    <color name="calSaturday">#3d75E3</color>
     <color name="calSelected">#CC750D1E</color>
     <color name="calMemo">#4A4A4A</color>
 

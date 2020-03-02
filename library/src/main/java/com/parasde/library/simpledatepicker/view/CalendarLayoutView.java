@@ -2,7 +2,6 @@ package com.parasde.library.simpledatepicker.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.GridLayout;
@@ -107,21 +106,21 @@ public class CalendarLayoutView implements CalendarLayout {
         }
 
         for(int i = 0; i < dateArray.size(); i++) {
-            LinearLayout tvLinear = new LinearLayout(context);
-            tvLinear.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout contentLayout = new LinearLayout(context);
+            contentLayout.setOrientation(LinearLayout.VERTICAL);
             // set Linear Layout
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
             );
+            params.width = 0;
             params.height = size.colSize();
-            tvLinear.setLayoutParams(params);
-            tvLinear.setPadding(3, 8, 3, 8);
+            contentLayout.setLayoutParams(params);
+            contentLayout.setPadding(3, 8, 3, 8);
 
             TextView memoTv = new TextView(context);
             // set TextView
             LinearLayout.LayoutParams memoTvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            memoTvParam.weight = 1;
 
             memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
@@ -160,40 +159,43 @@ public class CalendarLayoutView implements CalendarLayout {
             LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             tv.setLayoutParams(tvParam);
 
-            Log.e("Font size", calendarFontSize + " , " + memoFontSize);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, calendarFontSize);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //            tv.setGravity(Gravity.CENTER_VERTICAL);
 
             if(i == 0) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+            } else if(i == 6) {
+                tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
             } else if(i < 7) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
             } else if(i >= (blankDate+7)) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
 
-                tvLinear.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
+                contentLayout.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
 
                 calendarData.add(new CalendarData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i))));
                 if(checkSunday(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
                     tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+                } else if(checkSaturday(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
+                    tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
                 }
 
                 if(clickDataCheck(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
 //                    tv.setBackgroundResource(R.color.skyBlue);
                     if(colorHex != null) {
-                        tvLinear.setBackgroundColor(Color.parseColor(colorHex));
+                        contentLayout.setBackgroundColor(Color.parseColor(colorHex));
                     } else {
-                        tvLinear.setBackgroundResource(R.color.skyBlue);
+                        contentLayout.setBackgroundResource(R.color.skyBlue);
                     }
-                    calendarClickData.setLayout(tvLinear);
+                    calendarClickData.setLayout(contentLayout);
                 }
             }
 
 //            gridLayout.addView(tv);
-            tvLinear.addView(tv);
-            tvLinear.addView(memoTv);
-            gridLayout.addView(tvLinear);
+            contentLayout.addView(tv);
+            contentLayout.addView(memoTv);
+            gridLayout.addView(contentLayout);
         }
 
         return gridLayout;
@@ -205,7 +207,16 @@ public class CalendarLayoutView implements CalendarLayout {
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month);
         cal.set(Calendar.DATE, date);
-        return cal.get(Calendar.DAY_OF_WEEK) == 1;
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+    }
+
+    // saturday check
+    private boolean checkSaturday(int year, int month, int date) {
+        Calendar cal = (Calendar)Calendar.getInstance().clone();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DATE, date);
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
     }
 
     // click date check
@@ -215,7 +226,7 @@ public class CalendarLayoutView implements CalendarLayout {
 
     private class CalendarDateOnClick implements View.OnClickListener {
         private int position;
-        public CalendarDateOnClick(int position) {
+        CalendarDateOnClick(int position) {
             this.position = position;
         }
         @Override

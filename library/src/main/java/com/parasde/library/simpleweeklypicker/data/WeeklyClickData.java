@@ -1,9 +1,11 @@
 package com.parasde.library.simpleweeklypicker.data;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 // month 는 +1 된 값으로 저장
 public class WeeklyClickData {
+    private LinearLayout ll = null;
     private TextView tv = null;
     private int year;
     private int month;
@@ -11,11 +13,20 @@ public class WeeklyClickData {
 
     public WeeklyClickData() { }
 
-    public WeeklyClickData(TextView tv, int year, int month, int date) {
+    public WeeklyClickData(LinearLayout ll, TextView tv, int year, int month, int date) {
+        this.ll = ll;
         this.tv = tv;
         this.year = year;
         this.month = month;
         this.date = date;
+    }
+
+    public LinearLayout getLl() {
+        return ll;
+    }
+
+    public void setLl(LinearLayout ll) {
+        this.ll = ll;
     }
 
     public TextView getTv() {

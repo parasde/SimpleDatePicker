@@ -152,16 +152,18 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     public void setCalendarFontSize(float size) {
         if(size > 0 && size <= 18) {
             calendarFontSize = size;
+        } else {
+            Log.e("Invalid Range", "Calendar FontSize Range : 1~18");
         }
-        Log.e("SetFontSize Fail", "Calendar FontSize Range : 1~18");
     }
 
     @Override
     public void setMemoFontSize(float size) {
         if(size > 0 && size <= 10) {
             memoFontSize = size;
+        } else {
+            Log.e("Invalid Range", "Memo FontSize Range : 1~10");
         }
-        Log.e("SetFontSize Fail", "Memo FontSize Range : 1~10");
     }
 
     @Override

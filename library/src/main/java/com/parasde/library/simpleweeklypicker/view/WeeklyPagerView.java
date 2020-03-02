@@ -2,6 +2,7 @@ package com.parasde.library.simpleweeklypicker.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import com.parasde.library.simpleweeklypicker.data.WeeklyClickData;
 import com.parasde.library.simpleweeklypicker.data.WeeklyData;
 import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation;
 import com.parasde.library.simpleweeklypicker.data.WeeklySize;
+import com.parasde.library.simpleweeklypicker.data.WeeklyStyle;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyOnPageChangeListener;
 
@@ -88,7 +90,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 prevCalendar.add(Calendar.DATE, -7);
                 prevWeeklyData = getPrevWeeklyData(prevCalendar);
                 minPage--;
-                fragmentAdapter.addPrevItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), minPage + "");
+                fragmentAdapter.addPrevItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), minPage + "");
                 WeeklyPagerView.super.invalidate();
                 WeeklyPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
@@ -96,7 +98,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 nextCalendar.add(Calendar.DATE, 7);
                 nextWeeklyData = getNextWeeklyData(nextCalendar);
                 maxPage++;
-                fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), maxPage + "");
+                fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), maxPage + "");
             }
         }
 
@@ -127,6 +129,11 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
 
     private int maxPage = 2, minPage;
     private String[] dayOfWeek = null;
+
+    private WeeklyStyle weeklyStyle = WeeklyStyle.DEFAULT;
+    private float dateFontSize = 14f;
+    private float dayOfWeekFontSize = 14f;
+    private String colorHex;
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -165,7 +172,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         this.orientation = orientation;
 
         weeklyClickData = new WeeklyClickData();
-        onCreatePager(dayOfWeek);
+        this.dayOfWeek = dayOfWeek;
+        onCreatePager();
     }
 
     // initialize pager, set calendar
@@ -184,7 +192,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         nextCalendar = (Calendar) calendar.clone();
 
         weeklyClickData = new WeeklyClickData();
-        onCreatePager(dayOfWeek);
+        this.dayOfWeek = dayOfWeek;
+        onCreatePager();
     }
 
     // parameter date set background color
@@ -203,13 +212,50 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         prevCalendar = (Calendar) calendar.clone();
         nextCalendar = (Calendar) calendar.clone();
 
-        weeklyClickData = new WeeklyClickData(null, year, mMonth, date);
-        onCreatePager(dayOfWeek);
+        weeklyClickData = new WeeklyClickData(null, null, year, mMonth, date);
+        this.dayOfWeek = dayOfWeek;
+        onCreatePager();
     }
 
-    private void onCreatePager(String[] dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    @Override
+    public void setWeeklyCalendarStyle(@NonNull WeeklyStyle weeklyStyle) {
+        this.weeklyStyle = weeklyStyle;
+    }
 
+    /**
+     * ToDo date font , dayOfWeek font 설정할 수 있도록 추가 필요
+     * @param size
+     */
+
+    @Override
+    public void setDateFontSize(float size) {
+        if(size > 0 && size <= 18) {
+            this.dateFontSize = size;
+        } else {
+            Log.e("Invalid Range", "WeeklyCalendar FontSize Range : 1~18");
+        }
+    }
+
+    @Override
+    public void setDayOfWeekFontSize(float size) {
+        if(size > 0 && size <= 18) {
+            this.dayOfWeekFontSize = size;
+        } else {
+            Log.e("Invalid Range", "WeeklyCalendar FontSize Range : 1~18");
+        }
+    }
+
+    @Override
+    public void setBackgroundColorOnClick(String colorHex) {
+        this.colorHex = colorHex;
+    }
+
+    @Override
+    public void apply() {
+        onCreatePager();
+    }
+
+    private void onCreatePager() {
         if(orientation == WeeklyOrientation.VERTICAL) {
             setPageTransformer(true, new VerticalPager());
         }
@@ -221,9 +267,9 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         FragmentManager fragment = activity.getSupportFragmentManager();
         fragmentAdapter = new WeeklyFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        fragmentAdapter.addItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), "prev");
-        fragmentAdapter.addItem(new WeeklyFragmentPager(nowWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), "main");
-        fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize), "next");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "prev");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(nowWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "main");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "next");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }

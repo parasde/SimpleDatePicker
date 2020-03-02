@@ -1,9 +1,9 @@
 package com.parasde.library.simpleweeklypicker.data;
 
 public enum WeeklySize {
-    SMALL(16),
-    NORMAL(32),
-    BIG(64);
+    SMALL(20),
+    NORMAL(34),
+    BIG(46);
 
     private int size;
 

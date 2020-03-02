@@ -14,6 +14,7 @@ import com.parasde.library.simpledatepicker.view.CalendarPagerView;
 import com.parasde.library.simpleweeklypicker.data.WeeklyData;
 import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation;
 import com.parasde.library.simpleweeklypicker.data.WeeklySize;
+import com.parasde.library.simpleweeklypicker.data.WeeklyStyle;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyOnPageChangeListener;
 import com.parasde.library.simpleweeklypicker.view.WeeklyPagerView;
@@ -33,7 +34,7 @@ public class SampleActivity extends AppCompatActivity {
         header = findViewById(R.id.calHeader2);
         CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        pagerView.init(this, 2020, 2, 26, null, CalendarSize.BIG);
+        pagerView.init(this, 2020, 2, 26, null, CalendarSize.NORMAL);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -52,12 +53,6 @@ public class SampleActivity extends AppCompatActivity {
         pagerView.setBackgroundColorOnClick("#fff780");
         ArrayList<CalendarMemo> memoList = new ArrayList<>();
         memoList.add(new CalendarMemo(2020, 2, 25, "Hello World, Hello World"));
-        memoList.add(new CalendarMemo(2020, 2, 25, "0225"));
-        memoList.add(new CalendarMemo(2020, 2, 25, "0225"));
-
-        memoList.add(new CalendarMemo(2020, 2, 26, "World"));
-        memoList.add(new CalendarMemo(2020, 2, 27, "Hello"));
-        memoList.add(new CalendarMemo(2020, 2, 27, "CalendarPicker"));
         pagerView.setMemo(memoList);
         pagerView.setCalendarFontSize(18);
         pagerView.setMemoFontSize(11);
@@ -65,7 +60,7 @@ public class SampleActivity extends AppCompatActivity {
 
 
         WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);
-        weeklyPagerView.init(this, null, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL);
+        weeklyPagerView.init(this, null, WeeklySize.SMALL, WeeklyOrientation.VERTICAL);
         weeklyPagerView.setWeeklyClickListener(new WeeklyClickListener() {
             @Override
             public void onClick(int year, int month, int date) {
