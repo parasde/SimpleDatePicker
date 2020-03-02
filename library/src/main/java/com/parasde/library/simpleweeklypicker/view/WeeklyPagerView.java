@@ -1,6 +1,7 @@
 package com.parasde.library.simpleweeklypicker.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -242,7 +243,12 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
 
     @Override
     public void setBackgroundColorOnClick(String colorHex) {
-        this.colorHex = colorHex;
+        try {
+            Color.parseColor(colorHex);
+            this.colorHex = colorHex;
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
     }
 
     @Override
