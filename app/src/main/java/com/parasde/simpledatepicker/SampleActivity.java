@@ -52,7 +52,9 @@ public class SampleActivity extends AppCompatActivity {
 
         pagerView.setBackgroundColorOnClick("#fff780");
         ArrayList<CalendarMemo> memoList = new ArrayList<>();
-        memoList.add(new CalendarMemo(2020, 2, 25, "Hello World, Hello World"));
+        memoList.add(new CalendarMemo(2020, 2, 25, "Hello World"));
+        memoList.add(new CalendarMemo(2020, 2, 25, "Hello..."));
+        memoList.add(new CalendarMemo(2020, 2, 26, "World..."));
         pagerView.setMemo(memoList);
         pagerView.setCalendarFontSize(18);
         pagerView.setMemoFontSize(11);

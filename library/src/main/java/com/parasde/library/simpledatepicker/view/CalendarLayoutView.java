@@ -126,28 +126,14 @@ public class CalendarLayoutView implements CalendarLayout {
             memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
             memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
             if(dateArray.get(i).matches(numberRegExp) && size != CalendarSize.SMALL) {
-                int memoCount = 0;
                 for(CalendarMemo memo: filterMemoItems) {
                     int memoYear = memo.getYear();
                     int memoMonth = memo.getMonth();
                     int memoDate = memo.getDate();
                     if(curYear == memoYear && curMonth == memoMonth && memoDate == Integer.parseInt(dateArray.get(i))) {
-                        memoCount++;
                         String text = memo.getContent();
-                        if(text.length() > 5) {
-                            text = text.substring(0, 5) + "...";
-                        }
                         text += "\n" + memoTv.getText().toString();
                         memoTv.setText(text);
-                        if(size == CalendarSize.BIG) {
-                            if(memoCount == 2) {
-                                break;
-                            }
-                        } else {
-                            if(memoCount == 1) {
-                                break;
-                            }
-                        }
                     }
                 }
             }

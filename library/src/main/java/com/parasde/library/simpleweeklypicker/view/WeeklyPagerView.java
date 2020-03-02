@@ -222,11 +222,6 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         this.weeklyStyle = weeklyStyle;
     }
 
-    /**
-     * ToDo date font , dayOfWeek font 설정할 수 있도록 추가 필요
-     * @param size
-     */
-
     @Override
     public void setDateFontSize(float size) {
         if(size > 0 && size <= 18) {

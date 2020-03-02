@@ -26,8 +26,22 @@ Use the following method to show the header
 
 ### note
 
-version 1.2.7 release  
-CalendarPicker, WeeklyPicker init 중복호출 시 날짜가 비정상적으로 나오던 문제 수정  
+version 1.3.7 release  
+
+CalendarPicker
+ - SMALL, NORMAL, BIG 사이즈 값 변경
+ - 토요일 색상변경
+ - 특정요일에 메모기능 추가
+ - font 크기 DP 로 변경 (크기변경 추가)
+ - 날짜 클릭색상 변경 추가  
+ 
+WeeklyCalendarPicker
+ - SMALL, NORMAL, BIG 사이즈 값 변경
+ - 토요일 색상변경
+ - 스타일 추가 (WeeklyStyle.STYLE_1)
+ - font 크기 DP 로 변경 (크기변경 추가)
+ - 날짜 클릭색상 변경 추가 
+
 
 ---
 
@@ -35,7 +49,7 @@ CalendarPicker, WeeklyPicker init 중복호출 시 날짜가 비정상적으로 
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.2.7'
+implementation 'com.github.parasde:SimpleDatePicker:1.3.7'
 ```
 
 __activity_sample.xml__
