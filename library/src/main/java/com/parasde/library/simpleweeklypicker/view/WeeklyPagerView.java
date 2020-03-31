@@ -109,9 +109,9 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         }
     }
 
-    private Calendar calendar = (Calendar)Calendar.getInstance().clone();
-    private Calendar prevCalendar = (Calendar) calendar.clone();
-    private Calendar nextCalendar = (Calendar) calendar.clone();
+    private Calendar calendar;
+    private Calendar prevCalendar;
+    private Calendar nextCalendar;
     private ArrayList<WeeklyData> nowWeeklyData;
     private ArrayList<WeeklyData> prevWeeklyData;
     private ArrayList<WeeklyData> nextWeeklyData;
@@ -172,6 +172,11 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         this.weeklySize = size;
         this.orientation = orientation;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
+
+        prevCalendar = (Calendar) calendar.clone();
+        nextCalendar = (Calendar) calendar.clone();
+
         weeklyClickData = new WeeklyClickData();
         this.dayOfWeek = dayOfWeek;
         onCreatePager();
@@ -186,6 +191,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         this.orientation = orientation;
         int mMonth = month-1;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
 
@@ -206,6 +212,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         this.orientation = orientation;
         int mMonth = month-1;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
         calendar.set(Calendar.DATE, date);

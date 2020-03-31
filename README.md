@@ -26,8 +26,8 @@ Use the following method to show the header
 
 ### note
 
-version 1.3.8 release  
-setBackgroundColorOnClick 예외처리 추가
+version 1.3.9 release  
+31일에서 다음 달로 이동 시 요일표시가 비정상적인 부분 수정  
 
 ---
 
@@ -35,7 +35,7 @@ setBackgroundColorOnClick 예외처리 추가
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.3.8'
+implementation 'com.github.parasde:SimpleDatePicker:1.3.9'
 ```
 
 __activity_sample.xml__

@@ -192,6 +192,10 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     public void init(@NotNull AppCompatActivity activity, @Nullable String[] dayOfWeek, CalendarSize size) {
         this.activity = activity;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
+        prevCalendar = (Calendar) calendar.clone();
+        nextCalendar = (Calendar) calendar.clone();
+
         calendarClickData = new CalendarClickData();
         this.dayOfWeek = dayOfWeek;
         this.calendarSize = size;
@@ -205,8 +209,10 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         this.activity = activity;
         int mMonth = month-1;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
+
         prevCalendar = prevMonthCalendar();
         nextCalendar = nextMonthCalendar();
 
@@ -224,9 +230,11 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         this.activity = activity;
         int mMonth = month-1;
 
+        calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
         calendar.set(Calendar.DATE, date);
+
         prevCalendar = prevMonthCalendar();
         nextCalendar = nextMonthCalendar();
 
