@@ -194,6 +194,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
+        calendar.set(Calendar.DATE, 1);
 
         prevCalendar = (Calendar) calendar.clone();
         nextCalendar = (Calendar) calendar.clone();

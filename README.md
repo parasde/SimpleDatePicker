@@ -26,8 +26,8 @@ Use the following method to show the header
 
 ### note
 
-version 1.3.9 release  
-31일에서 다음달로 이동(달만 변경할 경우) 시 요일표시가 비정상적인 부분 수정  
+version 1.3.10 release  
+(CalendarPager, WeeklyPager) 년, 월만 설정 시 해당 달력의 기준 요일을 1로 지정  
 
 ---
 
@@ -35,7 +35,7 @@ version 1.3.9 release
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.3.9'
+implementation 'com.github.parasde:SimpleDatePicker:1.3.10'
 ```
 
 __activity_sample.xml__

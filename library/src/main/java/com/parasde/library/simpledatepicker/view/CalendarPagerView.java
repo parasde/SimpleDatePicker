@@ -212,6 +212,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         calendar = (Calendar)Calendar.getInstance().clone();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, mMonth);
+        calendar.set(Calendar.DATE, 1);
 
         prevCalendar = prevMonthCalendar();
         nextCalendar = nextMonthCalendar();
