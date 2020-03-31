@@ -27,7 +27,7 @@ Use the following method to show the header
 ### note
 
 version 1.3.9 release  
-31일에서 다음 달로 이동 시 요일표시가 비정상적인 부분 수정  
+31일에서 다음달로 이동(달만 변경할 경우) 시 요일표시가 비정상적인 부분 수정  
 
 ---
 
