@@ -6,15 +6,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.parasde.library.simpledatepicker.data.CalendarClickData;
 import com.parasde.library.simpledatepicker.data.CalendarMemo;
-import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 import com.parasde.library.simpledatepicker.listener.CalendarOnPageChangeListener;
 import com.parasde.library.simpledatepicker.view.CalendarPagerView;
 import com.parasde.library.simpleweeklypicker.data.WeeklyData;
 import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation;
 import com.parasde.library.simpleweeklypicker.data.WeeklySize;
-import com.parasde.library.simpleweeklypicker.data.WeeklyStyle;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklypicker.listener.WeeklyOnPageChangeListener;
 import com.parasde.library.simpleweeklypicker.view.WeeklyPagerView;
@@ -34,7 +33,7 @@ public class SampleActivity extends AppCompatActivity {
         header = findViewById(R.id.calHeader2);
         CalendarPagerView pagerView = findViewById(R.id.cal3);
 
-        pagerView.init(this, 2020, 2, 26, null, CalendarSize.NORMAL);
+        pagerView.init(this, 2020, 2, 26, null);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -50,14 +49,15 @@ public class SampleActivity extends AppCompatActivity {
             }
         });
 
-        pagerView.setBackgroundColorOnClick("#fff780");
+        pagerView.setColHeight(100);
+        pagerView.setTextColorOnClick("#ffffff");
+
+        pagerView.setBackgroundColorOnClick("#4781FF", CalendarClickData.Shape.CIRCLE);
         ArrayList<CalendarMemo> memoList = new ArrayList<>();
         memoList.add(new CalendarMemo(2020, 2, 25, "Hello World"));
         memoList.add(new CalendarMemo(2020, 2, 25, "Hello..."));
         memoList.add(new CalendarMemo(2020, 2, 26, "World..."));
         pagerView.setMemo(memoList);
-        pagerView.setCalendarFontSize(18);
-        pagerView.setMemoFontSize(11);
         pagerView.apply();
 
 

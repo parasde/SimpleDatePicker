@@ -1,13 +1,19 @@
 package com.parasde.library.simpledatepicker.data;
 
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class CalendarClickData {
     private LinearLayout layout = null;
     private int year;
     private int month;
     private int date;
+
+    private CalendarClickData.Shape shape;
+
+    public enum Shape {
+        RECTANGLE,
+        CIRCLE
+    }
 
     public CalendarClickData() { }
 
@@ -48,5 +54,13 @@ public class CalendarClickData {
 
     public void setDate(int date) {
         this.date = date;
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
     }
 }

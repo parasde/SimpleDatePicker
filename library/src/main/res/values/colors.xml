@@ -13,6 +13,7 @@
     <color name="calMemo">#4A4A4A</color>
 
 
+    <color name="dark">#000000</color>
     <color name="skyBlue">#dEFDFF</color>
     <color name="alphaSkyBlue">#E6dEFDFF</color>
 </resources>

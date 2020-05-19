@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.parasde.library.simpledatepicker.data.CalendarSize
-import com.parasde.library.simpleweeklypicker.data.WeeklyData
 import com.parasde.library.simpleweeklypicker.data.WeeklyOrientation
 import com.parasde.library.simpleweeklypicker.data.WeeklySize
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        cal.init(this as AppCompatActivity, 2019, 12, 2, null, CalendarSize.BIG)
+        cal.init(this as AppCompatActivity, 2019, 12, 2, null)
 
         // pageChange -> callback change year, month value
         cal.setCalendarPageChangeListener { year, month ->

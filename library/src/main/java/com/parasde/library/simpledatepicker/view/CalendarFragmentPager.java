@@ -5,7 +5,6 @@ import android.widget.LinearLayout;
 import com.parasde.library.simpledatepicker.R;
 import com.parasde.library.simpledatepicker.data.CalendarClickData;
 import com.parasde.library.simpledatepicker.data.CalendarMemo;
-import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,23 +16,27 @@ public class CalendarFragmentPager extends CalendarFragment {
     private CalendarClickListener calendarClickListener;
     private CalendarClickData calendarClickData;
     private String[] weekDay;
-    private CalendarSize size;
+    private Integer colHeight;
 
     private Calendar cal;
 
     private ArrayList<CalendarMemo> memoItems;
     private String colorHex;
+    private String textColorHex;
+    private CalendarClickData.Shape clickBgShape;
     private float memoFontSize, calendarFontSize;
 
-    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay,
-                          CalendarSize size, ArrayList<CalendarMemo> memoItems, String colorHex, float memoFontSize, float calendarFontSize) {
+    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay, Integer colHeight,
+                          ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, float calendarFontSize) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;
         this.weekDay = weekDay;
-        this.size = size;
         this.cal = (Calendar)cal.clone();
+        this.colHeight = colHeight;
         this.memoItems = memoItems;
         this.colorHex = colorHex;
+        this.textColorHex = textColorHex;
+        this.clickBgShape = clickBgShape;
         this.memoFontSize = memoFontSize;
         this.calendarFontSize = calendarFontSize;
     }
@@ -52,6 +55,6 @@ public class CalendarFragmentPager extends CalendarFragment {
     protected void initLayout(@NotNull LinearLayout layout) {
         CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, size, memoItems, colorHex,  memoFontSize, calendarFontSize));
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize));
     }
 }

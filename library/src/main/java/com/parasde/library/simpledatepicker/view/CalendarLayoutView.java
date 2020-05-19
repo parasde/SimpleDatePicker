@@ -1,9 +1,14 @@
 package com.parasde.library.simpledatepicker.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +19,6 @@ import com.parasde.library.simpledatepicker.R;
 import com.parasde.library.simpledatepicker.data.CalendarClickData;
 import com.parasde.library.simpledatepicker.data.CalendarData;
 import com.parasde.library.simpledatepicker.data.CalendarMemo;
-import com.parasde.library.simpledatepicker.data.CalendarSize;
 import com.parasde.library.simpledatepicker.listener.CalendarClickListener;
 
 import java.util.ArrayList;
@@ -31,8 +35,12 @@ public class CalendarLayoutView implements CalendarLayout {
 
     private Context context;
     private String colorHex;
+    private String textColorHex;
+    private CalendarClickData.Shape clickBgShape;
 
     private final String numberRegExp = "^[0-9]+$";
+
+    private final int COL_MIN = 40;
 
     CalendarLayoutView(Context context) {
         this.context = context;
@@ -44,8 +52,8 @@ public class CalendarLayoutView implements CalendarLayout {
     }
 
     @Override
-    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, CalendarSize size,
-                                     ArrayList<CalendarMemo> memoItems, String colorHex, float memoFontSize, float calendarFontSize) {
+    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, Integer colHeight,
+                                     ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, float calendarFontSize) {
         Calendar calendar = (Calendar) cal.clone();
         calendarData = new ArrayList<>();
         this.calendarClickData = calendarClickData;
@@ -53,29 +61,51 @@ public class CalendarLayoutView implements CalendarLayout {
         int curMonth = cal.get(Calendar.MONTH)+1;
 
         ArrayList<CalendarMemo> filterMemoItems = new ArrayList<>();
+        boolean isMemo = false;
         if(memoItems != null) {
             for(CalendarMemo memo: memoItems) {
                 int memoYear = memo.getYear();
                 int memoMonth = memo.getMonth();
                 if(curYear == memoYear && curMonth == memoMonth) {
                     filterMemoItems.add(memo);
+                    isMemo = true;
                 }
             }
         }
 
         this.colorHex = colorHex;
+        this.textColorHex = textColorHex;
+        this.clickBgShape = clickBgShape;
+
+        if(clickBgShape == null) {
+            this.clickBgShape = CalendarClickData.Shape.RECTANGLE;
+        }
 
         if(weekDay != null && weekDay.length == 7) {
             dayOfWeek = weekDay;
         }
 
-        if(size == null) {
-            size = CalendarSize.NORMAL;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        if(colHeight == null) {
+            colHeight = COL_MIN;
+        } else {
+            if(colHeight < 40) {    // min width
+                colHeight = COL_MIN;
+            } else {
+                // 컬럼 높이 * 6 값이 디바이스 너비를 넘어가면 디바이스 너비 / 7의 값으로 고정한다. (클릭 시 배경 색상 모양을 유지하기 위함)
+                int deviceWidth = displayMetrics.widthPixels;
+                if(dpToPx(colHeight) * 7 > deviceWidth) {
+                    colHeight = pxToDp(deviceWidth / 7);
+                }
+            }
         }
 
         // add date
         GridLayout gridLayout = new GridLayout(context);
-        gridLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, size.colSize()*7));
+        gridLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(colHeight * 6)));
         gridLayout.setColumnCount(7);
 
         // get first date of month
@@ -105,6 +135,7 @@ public class CalendarLayoutView implements CalendarLayout {
             dateArray.add(i + "");
         }
 
+        LinearLayout.LayoutParams memoTvParam = new LinearLayout.LayoutParams(dpToPx(colHeight / 2), dpToPx(colHeight / 2));
         for(int i = 0; i < dateArray.size(); i++) {
             LinearLayout contentLayout = new LinearLayout(context);
             contentLayout.setOrientation(LinearLayout.VERTICAL);
@@ -114,26 +145,28 @@ public class CalendarLayoutView implements CalendarLayout {
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
             );
             params.width = 0;
-            params.height = size.colSize();
+            params.height = dpToPx(colHeight);
             contentLayout.setLayoutParams(params);
-            contentLayout.setPadding(3, 8, 3, 8);
+            contentLayout.setGravity(Gravity.CENTER);
 
-            TextView memoTv = new TextView(context);
-            // set TextView
-            LinearLayout.LayoutParams memoTvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
-            memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
-            if(dateArray.get(i).matches(numberRegExp) && size != CalendarSize.SMALL) {
-                for(CalendarMemo memo: filterMemoItems) {
-                    int memoYear = memo.getYear();
-                    int memoMonth = memo.getMonth();
-                    int memoDate = memo.getDate();
-                    if(curYear == memoYear && curMonth == memoMonth && memoDate == Integer.parseInt(dateArray.get(i))) {
-                        String text = memo.getContent();
-                        text += "\n" + memoTv.getText().toString();
-                        memoTv.setText(text);
+            // memo 가 있을 경우
+            TextView memoTv = null;
+            if(isMemo) {
+                memoTv = new TextView(context);
+                memoTv.setLayoutParams(memoTvParam);
+                memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
+                memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
+                if(dateArray.get(i).matches(numberRegExp)) {
+                    for(CalendarMemo memo: filterMemoItems) {
+                        int memoYear = memo.getYear();
+                        int memoMonth = memo.getMonth();
+                        int memoDate = memo.getDate();
+                        if(curYear == memoYear && curMonth == memoMonth && memoDate == Integer.parseInt(dateArray.get(i))) {
+                            String text = memo.getContent();
+                            text += "\n" + memoTv.getText().toString();
+                            memoTv.setText(text);
+                        }
                     }
                 }
             }
@@ -141,14 +174,16 @@ public class CalendarLayoutView implements CalendarLayout {
 
             TextView tv = new TextView(context);
             tv.setText(dateArray.get(i));
-            // set TextView
-            LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            tv.setLayoutParams(tvParam);
-
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, calendarFontSize);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//            tv.setGravity(Gravity.CENTER_VERTICAL);
+            tv.setGravity(Gravity.CENTER);
 
+            LinearLayout.LayoutParams tvParam;
+            if(isMemo) {    // 메모가 있을 경우 높이를 2로 나눈다.
+                tvParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(colHeight / 2));
+            } else {
+                tvParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(colHeight));
+            }
             if(i == 0) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
             } else if(i == 6) {
@@ -156,6 +191,14 @@ public class CalendarLayoutView implements CalendarLayout {
             } else if(i < 7) {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
             } else if(i >= (blankDate+7)) {
+                if(isMemo) {    // 일~월 날짜 뷰 및, 빈 뷰가 끝나면 layout param 값 조절 / 메모가 있고 bg 모양이 circle 일 경우 높이, 너비를 2로 나누어 사이즈 조절
+                    if(clickBgShape == CalendarClickData.Shape.CIRCLE) {
+                        tvParam = new LinearLayout.LayoutParams(dpToPx(colHeight / 2), dpToPx(colHeight / 2));
+                    }
+                } else {
+                    tvParam = new LinearLayout.LayoutParams(dpToPx(colHeight), dpToPx(colHeight));
+                }
+
                 tv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
 
                 contentLayout.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
@@ -168,24 +211,45 @@ public class CalendarLayoutView implements CalendarLayout {
                 }
 
                 if(clickDataCheck(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-//                    tv.setBackgroundResource(R.color.skyBlue);
                     if(colorHex != null) {
-                        contentLayout.setBackgroundColor(Color.parseColor(colorHex));
+                        if(clickBgShape == CalendarClickData.Shape.CIRCLE) {
+                            tv.setBackground(circle(Color.parseColor(colorHex)));
+                        } else {
+                            tv.setBackgroundColor(Color.parseColor(colorHex));
+                        }
                     } else {
-                        contentLayout.setBackgroundResource(R.color.skyBlue);
+                        if(clickBgShape == CalendarClickData.Shape.CIRCLE) {
+                            tv.setBackground(circle(context.getColor(R.color.skyBlue)));
+                        } else {
+                            tv.setBackgroundResource(R.color.skyBlue);
+                        }
                     }
+
+                    if(textColorHex != null) {
+                        tv.setTextColor(Color.parseColor(textColorHex));
+                    }
+
                     calendarClickData.setLayout(contentLayout);
                 }
             }
+            tv.setLayoutParams(tvParam);
 
-//            gridLayout.addView(tv);
             contentLayout.addView(tv);
-            contentLayout.addView(memoTv);
+            if(isMemo) contentLayout.addView(memoTv);
             gridLayout.addView(contentLayout);
         }
 
         return gridLayout;
     }
+
+    private int dpToPx(int dp) {
+        return (int)(dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    private int pxToDp(int px){
+        return (int)(px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
 
     // sunday check
     private boolean checkSunday(int year, int month, int date) {
@@ -219,13 +283,29 @@ public class CalendarLayoutView implements CalendarLayout {
         public void onClick(View view) {
             if(calendarClickListener != null)  {
                 if(calendarClickData.getLayout() != null) {
-                    calendarClickData.getLayout().setBackgroundResource(android.R.color.transparent);
+                    // 이전 레이아웃 클릭 색상 초기화
+                    ((TextView)calendarClickData.getLayout().getChildAt(0)).setBackgroundResource(android.R.color.transparent);
+                    ((TextView)calendarClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.dark));
                 }
 
+                TextView dateTv = (TextView)((LinearLayout)view).getChildAt(0);
+
                 if(colorHex != null) {
-                    view.setBackgroundColor(Color.parseColor(colorHex));
+                    if(clickBgShape == CalendarClickData.Shape.CIRCLE) {
+                        dateTv.setBackground(circle(Color.parseColor(colorHex)));
+                    } else {
+                        dateTv.setBackgroundColor(Color.parseColor(colorHex));
+                    }
                 } else {
-                    view.setBackgroundResource(R.color.skyBlue);
+                    if(clickBgShape == CalendarClickData.Shape.CIRCLE) {
+                        dateTv.setBackground(circle(context.getColor(R.color.skyBlue)));
+                    } else {
+                        dateTv.setBackgroundResource(R.color.skyBlue);
+                    }
+                }
+
+                if(textColorHex != null) {
+                    dateTv.setTextColor(Color.parseColor(textColorHex));
                 }
 
                 // click date set
@@ -239,5 +319,13 @@ public class CalendarLayoutView implements CalendarLayout {
             }
         }
 
+    }
+
+    private GradientDrawable circle(int bgColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.OVAL);
+        shape.setCornerRadii(new float[]{0, 0, 0, 0, 0, 0, 0, 0});
+        shape.setColor(bgColor);
+        return shape;
     }
 }
