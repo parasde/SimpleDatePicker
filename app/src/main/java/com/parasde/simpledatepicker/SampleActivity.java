@@ -58,6 +58,7 @@ public class SampleActivity extends AppCompatActivity {
         memoList.add(new CalendarMemo(2020, 2, 25, "Hello..."));
         memoList.add(new CalendarMemo(2020, 2, 26, "World..."));
         pagerView.setMemo(memoList);
+        pagerView.setMemoTextColor("#");
         pagerView.apply();
 
 

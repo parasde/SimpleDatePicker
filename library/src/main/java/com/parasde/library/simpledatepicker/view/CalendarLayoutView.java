@@ -52,8 +52,11 @@ public class CalendarLayoutView implements CalendarLayout {
     }
 
     @Override
-    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData, Integer colHeight,
-                                     ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, float calendarFontSize) {
+    public GridLayout onCreateLayout(Calendar cal, String[] weekDay, CalendarClickData calendarClickData,
+                                     Integer colHeight, ArrayList<CalendarMemo> memoItems,
+                                     String colorHex, String textColorHex,
+                                     CalendarClickData.Shape clickBgShape,
+                                     float memoFontSize, String memoTextColor, float calendarFontSize) {
         Calendar calendar = (Calendar) cal.clone();
         calendarData = new ArrayList<>();
         this.calendarClickData = calendarClickData;
@@ -155,7 +158,11 @@ public class CalendarLayoutView implements CalendarLayout {
                 memoTv = new TextView(context);
                 memoTv.setLayoutParams(memoTvParam);
                 memoTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
+                if(memoTextColor == null) {
+                    memoTv.setTextColor(ContextCompat.getColor(context, R.color.calMemo));
+                } else {
+                    memoTv.setTextColor(Color.parseColor(memoTextColor));
+                }
                 memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
                 if(dateArray.get(i).matches(numberRegExp)) {
                     for(CalendarMemo memo: filterMemoItems) {

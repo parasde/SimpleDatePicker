@@ -72,14 +72,18 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
                 // left swipe
                 calendar.add(Calendar.MONTH, -1);
                 minPrevMonth();
-                fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize), "$position");
+                fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener,
+                        calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex,
+                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize), position + "");
                 CalendarPagerView.super.invalidate();
                 CalendarPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
                 // right swipe
                 calendar.add(Calendar.MONTH, 2);
                 addNextMonth();
-                fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize), "$position");
+                fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener,
+                        calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex,
+                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize), position + "");
             }
         }
 
@@ -110,6 +114,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     private ArrayList<CalendarMemo> memoItems = null;
     private String colorHex = null;
     private String textColorHex = null;
+    private String memoTextColor = null;
     private CalendarClickData.Shape clickBgShape = null;
     private float memoFontSize = 10f;
     private float calendarFontSize = 17f;
@@ -164,6 +169,16 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
             memoFontSize = size;
         } else {
             Log.e("Invalid Range", "Memo FontSize Range : 1~10");
+        }
+    }
+
+    @Override
+    public void setMemoTextColor(String colorHex) {
+        try {
+            Color.parseColor(colorHex);
+            this.memoTextColor = colorHex;
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
         }
     }
 
@@ -288,9 +303,14 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         FragmentManager fragment = activity.getSupportFragmentManager();
         fragmentAdapter = new CalendarFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        fragmentAdapter.addItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize), "0");
-        fragmentAdapter.addItem(new CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize), "1");
-        fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize), "2");
+        fragmentAdapter.addItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "0");
+
+        fragmentAdapter.addItem(new CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "1");
+
+        fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "2");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }
@@ -328,7 +348,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
 
 
     @Override
-    public void onTouchEnable(boolean enable) {
+    public void onSwipeEnable(boolean enable) {
         swipeEnable = enable;
     }
 

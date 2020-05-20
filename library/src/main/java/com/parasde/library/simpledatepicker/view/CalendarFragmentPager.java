@@ -23,11 +23,12 @@ public class CalendarFragmentPager extends CalendarFragment {
     private ArrayList<CalendarMemo> memoItems;
     private String colorHex;
     private String textColorHex;
+    private String memoTextColor;
     private CalendarClickData.Shape clickBgShape;
     private float memoFontSize, calendarFontSize;
 
     CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay, Integer colHeight,
-                          ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, float calendarFontSize) {
+                          ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, String memoTextColor, float calendarFontSize) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;
         this.weekDay = weekDay;
@@ -38,6 +39,7 @@ public class CalendarFragmentPager extends CalendarFragment {
         this.textColorHex = textColorHex;
         this.clickBgShape = clickBgShape;
         this.memoFontSize = memoFontSize;
+        this.memoTextColor = memoTextColor;
         this.calendarFontSize = calendarFontSize;
     }
 
@@ -55,6 +57,6 @@ public class CalendarFragmentPager extends CalendarFragment {
     protected void initLayout(@NotNull LinearLayout layout) {
         CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, calendarFontSize));
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize));
     }
 }

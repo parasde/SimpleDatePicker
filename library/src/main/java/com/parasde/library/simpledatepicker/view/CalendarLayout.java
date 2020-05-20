@@ -12,5 +12,5 @@ import java.util.Calendar;
 public interface CalendarLayout {
     void setCalendarDateOnClickListener(CalendarClickListener listener);
     GridLayout onCreateLayout(Calendar calendar, String[] weekDay, CalendarClickData calendarClickData, Integer colHeight,
-                              ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, float calendarFontSize);
+                              ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickData.Shape clickBgShape, float memoFontSize, String memoTextColor, float calendarFontSize);
 }
