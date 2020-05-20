@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 /**
  * 2019. 1. 3.
- * Copy SimpleDatePicker
+ * Copy SimpleCalendar
  */
 public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     private WeeklyPagerAdapterChangerListener weeklyPagerAdapterChangerListener = new WeeklyPagerAdapterChangerListener();
