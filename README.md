@@ -1,13 +1,11 @@
-## SimpleDatePicker
+## Simple Calendar
 
 
 ### Overview
 
-안드로이드 용 날짜 선택 라이브러리 (샘플 소스 포함)
+안드로이드 용 캘린더 라이브러리 (샘플 소스 포함)  
 
-Simple DatePicker for Android library.
-
-you can download and run this source.
+Calendar library for Android  
 
 - Use java.util.Calendar
 - Use ViewPager, FragmentStatePagerAdapter (Fragment)
@@ -20,7 +18,7 @@ you can download and run this source.
 this library not include calendar header(Year-Month)  
 Use the following method to show the header  
 
-![preview](https://raw.githubusercontent.com/parasde/SimpleDatePicker/master/preview.PNG)
+![preview](https://raw.githubusercontent.com/parasde/simpe-calendar/master/preview.PNG)
 
 ---
 
@@ -35,7 +33,7 @@ version 1.3.10 release
 
 __Gradle__
 ```
-implementation 'com.github.parasde:SimpleDatePicker:1.3.10'
+implementation 'com.github.parasde:simple-calendar:1.3.10'
 ```
 
 __activity_sample.xml__

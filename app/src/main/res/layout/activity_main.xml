@@ -20,12 +20,12 @@
             android:textSize="24dp"
             android:textAlignment="center"/>
 
-        <com.parasde.library.simpledatepicker.view.CalendarPagerView
+        <com.parasde.library.simplecalendar.view.CalendarPagerView
             android:id="@+id/cal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+        </com.parasde.library.simplecalendar.view.CalendarPagerView>
 
         <!-- scroll pager test -->
 <!--        <ScrollView-->
@@ -64,11 +64,11 @@
 
 <!--        </ScrollView>-->
 
-        <com.parasde.library.simpleweeklypicker.view.WeeklyPagerView
+        <com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView
             android:id="@+id/weekly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.parasde.library.simpleweeklypicker.view.WeeklyPagerView>
+        </com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView>
     </LinearLayout>
 </ScrollView>

@@ -19,18 +19,18 @@
         android:textAlignment="center"/>
 
 
-    <com.parasde.library.simpledatepicker.view.CalendarPagerView
+    <com.parasde.library.simplecalendar.view.CalendarPagerView
         android:id="@+id/cal3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.parasde.library.simpledatepicker.view.CalendarPagerView>
+    </com.parasde.library.simplecalendar.view.CalendarPagerView>
 
-    <com.parasde.library.simpleweeklypicker.view.WeeklyPagerView
+    <com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView
         android:id="@+id/weekly2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.parasde.library.simpleweeklypicker.view.WeeklyPagerView>
+    </com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView>
 
 </LinearLayout>
