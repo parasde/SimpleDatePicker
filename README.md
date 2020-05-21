@@ -27,14 +27,14 @@ Use the following method to show the header
 version 2.3.10 release  
 
 Calendar
- - CalendarSize 제거 -> setColHeight(float dp) 변경
+ - CalendarSize 제거 -> setColHeight(int dp) 변경
  - setTextColorOnClick 추가 (클릭 시 날짜 텍스트 색상)
- - setBackgroundColorOnClick(String colorHex, CalendarClickData.Shape shape) 추가 (클릭 시 배경 모양 변경 default = RECTANGLE)
+ - setBackgroundColorOnClick(String color hex, CalendarClickData.Shape shape) 추가 (클릭 시 배경 모양 변경 default = RECTANGLE)
  
 
 WeeklyCalendar
- - setTextColorOnClick (color) 추가
- - setBackgroundColorOnClick (color, shape) 추가
+ - setTextColorOnClick (color hex) 추가
+ - setBackgroundColorOnClick (color hex, shape) 추가
  - setMemo 추가
  - setMemoFontSize 추가
  - setMemoTextColor 추가
