@@ -30,6 +30,7 @@ Calendar
  - CalendarSize 제거 -> setColHeight(int dp) 변경
  - setTextColorOnClick 추가 (클릭 시 날짜 텍스트 색상)
  - setBackgroundColorOnClick(String color hex, CalendarClickData.Shape shape) 추가 (클릭 시 배경 모양 변경 default = RECTANGLE)
+ - onTouchEnable -> onSwipeEnable 변경
  
 
 WeeklyCalendar
