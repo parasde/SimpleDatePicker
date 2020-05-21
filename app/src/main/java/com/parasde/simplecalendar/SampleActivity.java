@@ -13,7 +13,7 @@ import com.parasde.library.simplecalendar.listener.CalendarOnPageChangeListener;
 import com.parasde.library.simplecalendar.view.CalendarPagerView;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyData;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyOrientation;
-import com.parasde.library.simpleweeklycalendar.data.WeeklySize;
+import com.parasde.library.simpleweeklycalendar.data.WeeklyStyle;
 import com.parasde.library.simpleweeklycalendar.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklycalendar.listener.WeeklyOnPageChangeListener;
 import com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView;
@@ -31,9 +31,9 @@ public class SampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         header = findViewById(R.id.calHeader2);
-        CalendarPagerView pagerView = findViewById(R.id.cal3);
+        CalendarPagerView pagerView = findViewById(R.id.cal2);
 
-        pagerView.init(this, 2020, 2, 26, null);
+        pagerView.init(this, 2020, 5, 21, null);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -54,16 +54,16 @@ public class SampleActivity extends AppCompatActivity {
 
         pagerView.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
         ArrayList<CalendarMemo> memoList = new ArrayList<>();
-        memoList.add(new CalendarMemo(2020, 2, 25, "Hello World"));
-        memoList.add(new CalendarMemo(2020, 2, 25, "Hello..."));
-        memoList.add(new CalendarMemo(2020, 2, 26, "World..."));
+        memoList.add(new CalendarMemo(2020, 5, 21, "Hello World"));
+        memoList.add(new CalendarMemo(2020, 5, 20, "Hello..."));
+        memoList.add(new CalendarMemo(2020, 5, 23, "World..."));
         pagerView.setMemo(memoList);
-        pagerView.setMemoTextColor("#");
+        pagerView.setMemoTextColor("#000000");
         pagerView.apply();
 
 
         WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);
-        weeklyPagerView.init(this, null, WeeklySize.SMALL, WeeklyOrientation.VERTICAL);
+        weeklyPagerView.init(this, 2020, 5, 21, null, WeeklyOrientation.VERTICAL);
         weeklyPagerView.setWeeklyClickListener(new WeeklyClickListener() {
             @Override
             public void onClick(int year, int month, int date) {
@@ -79,7 +79,22 @@ public class SampleActivity extends AppCompatActivity {
                 }
             }
         });
+
+        weeklyPagerView.setColHeight(50);
+        weeklyPagerView.setTextColorOnClick("#ffffff");
+        weeklyPagerView.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
+        weeklyPagerView.setMemo(memoList);
+        weeklyPagerView.setMemoTextColor("#000000");
+        weeklyPagerView.apply();
+
+
+        WeeklyPagerView weeklyPagerView3 = findViewById(R.id.weekly3);
+        weeklyPagerView3.init(this, 2020, 5, 21,  new String[]{"일", "월", "화", "수", "목", "금", "토"}, WeeklyOrientation.VERTICAL);
+        weeklyPagerView3.setColHeight(50);
+        weeklyPagerView3.setTextColorOnClick("#ffffff");
+        weeklyPagerView3.setWeeklyCalendarStyle(WeeklyStyle.STYLE_1);
+        weeklyPagerView3.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
+        weeklyPagerView3.setMemoTextColor("#000000");
+        weeklyPagerView3.apply();
     }
-
-
 }

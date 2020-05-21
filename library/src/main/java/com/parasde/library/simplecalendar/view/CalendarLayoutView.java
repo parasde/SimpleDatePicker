@@ -64,17 +64,9 @@ public class CalendarLayoutView implements CalendarLayout {
         int curYear = cal.get(Calendar.YEAR);
         int curMonth = cal.get(Calendar.MONTH)+1;
 
-        ArrayList<CalendarMemo> filterMemoItems = new ArrayList<>();
         boolean isMemo = false;
-        if(memoItems != null) {
-            for(CalendarMemo memo: memoItems) {
-                int memoYear = memo.getYear();
-                int memoMonth = memo.getMonth();
-                if(curYear == memoYear && curMonth == memoMonth) {
-                    filterMemoItems.add(memo);
-                    isMemo = true;
-                }
-            }
+        if(memoItems != null && memoItems.size() > 0) {
+            isMemo = true;
         }
 
         this.colorHex = colorHex;
@@ -109,7 +101,7 @@ public class CalendarLayoutView implements CalendarLayout {
 
         // add date
         GridLayout gridLayout = new GridLayout(context);
-        gridLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(colHeight * 6)));
+        gridLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(colHeight * 7)));
         gridLayout.setColumnCount(7);
 
         // get first date of month
@@ -142,15 +134,15 @@ public class CalendarLayoutView implements CalendarLayout {
         LinearLayout.LayoutParams memoTvParam = new LinearLayout.LayoutParams(dpToPx(colHeight / 2), dpToPx(colHeight / 2));
         for(int i = 0; i < dateArray.size(); i++) {
             LinearLayout contentLayout = new LinearLayout(context);
-            contentLayout.setOrientation(LinearLayout.VERTICAL);
             // set Linear Layout
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),
                     GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
             );
-            params.width = 0;
+            params.width = dpToPx(colHeight);
             params.height = dpToPx(colHeight);
             contentLayout.setLayoutParams(params);
+            contentLayout.setOrientation(LinearLayout.VERTICAL);
             contentLayout.setGravity(Gravity.CENTER);
 
             // memo 가 있을 경우
@@ -166,7 +158,7 @@ public class CalendarLayoutView implements CalendarLayout {
                 }
                 memoTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, memoFontSize);
                 if(dateArray.get(i).matches(numberRegExp)) {
-                    for(CalendarMemo memo: filterMemoItems) {
+                    for(CalendarMemo memo: memoItems) {
                         int memoYear = memo.getYear();
                         int memoMonth = memo.getMonth();
                         int memoDate = memo.getDate();
@@ -219,24 +211,7 @@ public class CalendarLayoutView implements CalendarLayout {
                 }
 
                 if(clickDataCheck(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-                    if(colorHex != null) {
-                        if(clickBgShape == CalendarClickShape.CIRCLE) {
-                            tv.setBackground(circle(Color.parseColor(colorHex)));
-                        } else {
-                            tv.setBackgroundColor(Color.parseColor(colorHex));
-                        }
-                    } else {
-                        if(clickBgShape == CalendarClickShape.CIRCLE) {
-                            tv.setBackground(circle(context.getColor(R.color.skyBlue)));
-                        } else {
-                            tv.setBackgroundResource(R.color.skyBlue);
-                        }
-                    }
-
-                    if(textColorHex != null) {
-                        tv.setTextColor(Color.parseColor(textColorHex));
-                    }
-
+                    textViewStyle(tv);
                     calendarClickData.setLayout(contentLayout);
                 }
             }
@@ -295,26 +270,7 @@ public class CalendarLayoutView implements CalendarLayout {
                     ((TextView)calendarClickData.getLayout().getChildAt(0)).setBackgroundResource(android.R.color.transparent);
                     ((TextView)calendarClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.dark));
                 }
-
-                TextView dateTv = (TextView)((LinearLayout)view).getChildAt(0);
-
-                if(colorHex != null) {
-                    if(clickBgShape == CalendarClickShape.CIRCLE) {
-                        dateTv.setBackground(circle(Color.parseColor(colorHex)));
-                    } else {
-                        dateTv.setBackgroundColor(Color.parseColor(colorHex));
-                    }
-                } else {
-                    if(clickBgShape == CalendarClickShape.CIRCLE) {
-                        dateTv.setBackground(circle(context.getColor(R.color.skyBlue)));
-                    } else {
-                        dateTv.setBackgroundResource(R.color.skyBlue);
-                    }
-                }
-
-                if(textColorHex != null) {
-                    dateTv.setTextColor(Color.parseColor(textColorHex));
-                }
+                textViewStyle((TextView)((LinearLayout)view).getChildAt(0));
 
                 // click date set
                 calendarClickData.setLayout((LinearLayout)view);
@@ -327,6 +283,26 @@ public class CalendarLayoutView implements CalendarLayout {
             }
         }
 
+    }
+
+    private void textViewStyle(TextView textView) {
+        if(colorHex != null) {
+            if(clickBgShape == CalendarClickShape.CIRCLE) {
+                textView.setBackground(circle(Color.parseColor(colorHex)));
+            } else {
+                textView.setBackgroundColor(Color.parseColor(colorHex));
+            }
+        } else {
+            if(clickBgShape == CalendarClickShape.CIRCLE) {
+                textView.setBackground(circle(context.getColor(R.color.skyBlue)));
+            } else {
+                textView.setBackgroundResource(R.color.skyBlue);
+            }
+        }
+
+        if(textColorHex != null) {
+            textView.setTextColor(Color.parseColor(textColorHex));
+        }
     }
 
     private GradientDrawable circle(int bgColor) {

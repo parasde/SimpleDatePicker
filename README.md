@@ -18,13 +18,13 @@ Calendar library for Android
 this library not include calendar header(Year-Month)  
 Use the following method to show the header  
 
-![preview](https://raw.githubusercontent.com/parasde/simpe-calendar/master/preview.PNG)
+![preview](https://raw.githubusercontent.com/parasde/simpe-calendar/master/preview.png)
 
 ---
 
 ### note
 
-version 1.3.10 release  
+version 2.3.10 release  
 (CalendarPager, WeeklyPager) 년, 월만 설정 시 해당 달력의 기준 요일을 1로 지정  
 
 ---
@@ -33,7 +33,7 @@ version 1.3.10 release
 
 __Gradle__
 ```
-implementation 'com.github.parasde:simple-calendar:1.3.10'
+implementation 'com.github.parasde:simple-calendar:2.3.10'
 ```
 
 __activity_sample.xml__
@@ -50,17 +50,26 @@ __activity_sample.xml__
         android:textAlignment="center"/>
 
 
-    <com.parasde.library.simpledatepicker.view.CalendarPagerView
-        android:id="@+id/cal3"
+    <com.parasde.library.simplecalendar.view.CalendarPagerView
+        android:id="@+id/cal2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.parasde.library.simpledatepicker.view.CalendarPagerView>
-    <com.parasde.library.simpleweeklypicker.view.WeeklyPagerView
+    </com.parasde.library.simplecalendar.view.CalendarPagerView>
+
+    <com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView
         android:id="@+id/weekly2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.parasde.library.simpleweeklypicker.view.WeeklyPagerView>
+
+    </com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView>
+
+    <com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView
+        android:id="@+id/weekly3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.parasde.library.simpleweeklycalendar.view.WeeklyPagerView>
 
 ```
 
@@ -69,7 +78,6 @@ __activity_sample.xml__
 __SampleActivity.java__
 
 ```
-// Initialize
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -81,9 +89,9 @@ public class SampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
 
         header = findViewById(R.id.calHeader2);
-        CalendarPagerView pagerView = findViewById(R.id.cal3);
+        CalendarPagerView pagerView = findViewById(R.id.cal2);
 
-        pagerView.init(this, 2019, 12, 5, null, CalendarSize.NORMAL);
+        pagerView.init(this, 2020, 5, 21, null);
         pagerView.setCalendarPageChangeListener(new CalendarOnPageChangeListener() {
             @Override
             public void onChange(int year, int month) {
@@ -91,12 +99,29 @@ public class SampleActivity extends AppCompatActivity {
                 else header.setText(year + "-" + month);
             }
         });
-        
-        // touch control
-        // cal.onTouchEnable(false)
-        
+
+        pagerView.setCalendarClickListener(new CalendarClickListener() {
+            @Override
+            public void onClick(int year, int month, int date) {
+                Log.d("Calendar Click", year + "-" + month + "-" + date);
+            }
+        });
+
+        pagerView.setColHeight(100);
+        pagerView.setTextColorOnClick("#ffffff");
+
+        pagerView.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
+        ArrayList<CalendarMemo> memoList = new ArrayList<>();
+        memoList.add(new CalendarMemo(2020, 5, 21, "Hello World"));
+        memoList.add(new CalendarMemo(2020, 5, 20, "Hello..."));
+        memoList.add(new CalendarMemo(2020, 5, 23, "World..."));
+        pagerView.setMemo(memoList);
+        pagerView.setMemoTextColor("#000000");
+        pagerView.apply();
+
+
         WeeklyPagerView weeklyPagerView = findViewById(R.id.weekly2);
-        weeklyPagerView.init(this, null, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL);
+        weeklyPagerView.init(this, 2020, 5, 21, null, WeeklyOrientation.VERTICAL);
         weeklyPagerView.setWeeklyClickListener(new WeeklyClickListener() {
             @Override
             public void onClick(int year, int month, int date) {
@@ -112,12 +137,25 @@ public class SampleActivity extends AppCompatActivity {
                 }
             }
         });
+
+        weeklyPagerView.setColHeight(50);
+        weeklyPagerView.setTextColorOnClick("#ffffff");
+        weeklyPagerView.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
+        weeklyPagerView.setMemo(memoList);
+        weeklyPagerView.setMemoTextColor("#000000");
+        weeklyPagerView.apply();
+
+
+        WeeklyPagerView weeklyPagerView3 = findViewById(R.id.weekly3);
+        weeklyPagerView3.init(this, 2020, 5, 21,  new String[]{"일", "월", "화", "수", "목", "금", "토"}, WeeklyOrientation.VERTICAL);
+        weeklyPagerView3.setColHeight(50);
+        weeklyPagerView3.setTextColorOnClick("#ffffff");
+        weeklyPagerView3.setWeeklyCalendarStyle(WeeklyStyle.STYLE_1);
+        weeklyPagerView3.setBackgroundColorOnClick("#4781FF", CalendarClickShape.CIRCLE);
+        weeklyPagerView3.setMemoTextColor("#000000");
+        weeklyPagerView3.apply();
     }
-
-
 }
-
-
 
 ```
 ---

@@ -1,40 +1,30 @@
 package com.parasde.library.simpleweeklycalendar.data;
 
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 // month 는 +1 된 값으로 저장
 public class WeeklyClickData {
-    private LinearLayout ll = null;
-    private TextView tv = null;
+    private LinearLayout layout = null;
     private int year;
     private int month;
     private int date;
+    private int position;
 
     public WeeklyClickData() { }
 
-    public WeeklyClickData(LinearLayout ll, TextView tv, int year, int month, int date) {
-        this.ll = ll;
-        this.tv = tv;
+    public WeeklyClickData(LinearLayout layout, int year, int month, int date) {
+        this.layout = layout;
         this.year = year;
         this.month = month;
         this.date = date;
     }
 
-    public LinearLayout getLl() {
-        return ll;
+    public LinearLayout getLayout() {
+        return layout;
     }
 
-    public void setLl(LinearLayout ll) {
-        this.ll = ll;
-    }
-
-    public TextView getTv() {
-        return tv;
-    }
-
-    public void setTv(TextView tv) {
-        this.tv = tv;
+    public void setLayout(LinearLayout layout) {
+        this.layout = layout;
     }
 
     public int getYear() {
@@ -60,4 +50,13 @@ public class WeeklyClickData {
     public void setDate(int date) {
         this.date = date;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 }

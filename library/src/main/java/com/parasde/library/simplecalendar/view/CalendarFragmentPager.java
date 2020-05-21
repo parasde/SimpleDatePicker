@@ -28,7 +28,8 @@ public class CalendarFragmentPager extends CalendarFragment {
     private CalendarClickShape clickBgShape;
     private float memoFontSize, calendarFontSize;
 
-    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener, CalendarClickData calendarClickData, String[] weekDay, Integer colHeight,
+    CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener,
+                          CalendarClickData calendarClickData, String[] weekDay, Integer colHeight,
                           ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickShape clickBgShape, float memoFontSize, String memoTextColor, float calendarFontSize) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;

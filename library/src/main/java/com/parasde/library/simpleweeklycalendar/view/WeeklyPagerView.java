@@ -13,10 +13,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.parasde.library.simplecalendar.data.CalendarClickShape;
+import com.parasde.library.simplecalendar.data.CalendarMemo;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyClickData;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyData;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyOrientation;
-import com.parasde.library.simpleweeklycalendar.data.WeeklySize;
 import com.parasde.library.simpleweeklycalendar.data.WeeklyStyle;
 import com.parasde.library.simpleweeklycalendar.listener.WeeklyClickListener;
 import com.parasde.library.simpleweeklycalendar.listener.WeeklyOnPageChangeListener;
@@ -91,7 +92,9 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 prevCalendar.add(Calendar.DATE, -7);
                 prevWeeklyData = getPrevWeeklyData(prevCalendar);
                 minPage--;
-                fragmentAdapter.addPrevItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), minPage + "");
+                fragmentAdapter.addPrevItem(new WeeklyFragmentPager(onClickListener,
+                        weeklyClickData, dayOfWeek, colHeight, prevWeeklyData, weeklyStyle,
+                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), minPage + "");
                 WeeklyPagerView.super.invalidate();
                 WeeklyPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
@@ -99,7 +102,9 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 nextCalendar.add(Calendar.DATE, 7);
                 nextWeeklyData = getNextWeeklyData(nextCalendar);
                 maxPage++;
-                fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), maxPage + "");
+                fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
+                        weeklyClickData, dayOfWeek, colHeight, nextWeeklyData, weeklyStyle,
+                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), maxPage + "");
             }
         }
 
@@ -126,15 +131,21 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     private boolean swipeEnable = true;
 
     private WeeklyOrientation orientation = WeeklyOrientation.HORIZONTAL;
-    private WeeklySize weeklySize = WeeklySize.NORMAL;
 
     private int maxPage = 2, minPage;
     private String[] dayOfWeek = null;
 
     private WeeklyStyle weeklyStyle = WeeklyStyle.DEFAULT;
-    private float dateFontSize = 14f;
-    private float dayOfWeekFontSize = 14f;
+    private float dateFontSize = 12f;
+    private float dayOfWeekFontSize = 12f;
+
+    private Integer colHeight = null;
+    private ArrayList<CalendarMemo> memoItems = null;
     private String colorHex;
+    private String textColorHex = null;
+    private String memoTextColor = null;
+    private CalendarClickShape clickBgShape = null;
+    private float memoFontSize = 10f;
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -167,9 +178,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
 
     // initialize pager, add calendar fragment + draw calendar
     @Override
-    public void init(@NotNull AppCompatActivity activity, @Nullable String[] dayOfWeek, WeeklySize size, @NonNull WeeklyOrientation orientation) {
+    public void init(@NotNull AppCompatActivity activity, @Nullable String[] dayOfWeek, @NonNull WeeklyOrientation orientation) {
         this.activity = activity;
-        this.weeklySize = size;
         this.orientation = orientation;
 
         calendar = (Calendar)Calendar.getInstance().clone();
@@ -185,9 +195,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     // initialize pager, set calendar
     // input month 1 ~ 12 value
     @Override
-    public void init(@NotNull AppCompatActivity activity, int year, int month, @Nullable String[] dayOfWeek, WeeklySize size, @NonNull WeeklyOrientation orientation) {
+    public void init(@NotNull AppCompatActivity activity, int year, int month, @Nullable String[] dayOfWeek, @NonNull WeeklyOrientation orientation) {
         this.activity = activity;
-        this.weeklySize = size;
         this.orientation = orientation;
         int mMonth = month-1;
 
@@ -207,9 +216,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     // parameter date set background color
     // input month 1 ~ 12 value
     @Override
-    public void init(@NotNull AppCompatActivity activity, int year, int month, int date, @Nullable String[] dayOfWeek, WeeklySize size, @NonNull WeeklyOrientation orientation) {
+    public void init(@NotNull AppCompatActivity activity, int year, int month, int date, @Nullable String[] dayOfWeek, @NonNull WeeklyOrientation orientation) {
         this.activity = activity;
-        this.weeklySize = size;
         this.orientation = orientation;
         int mMonth = month-1;
 
@@ -221,9 +229,14 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         prevCalendar = (Calendar) calendar.clone();
         nextCalendar = (Calendar) calendar.clone();
 
-        weeklyClickData = new WeeklyClickData(null, null, year, mMonth, date);
+        weeklyClickData = new WeeklyClickData(null, year, mMonth, date);
         this.dayOfWeek = dayOfWeek;
         onCreatePager();
+    }
+
+    @Override
+    public void setColHeight(int height) {
+        this.colHeight = height;
     }
 
     @Override
@@ -250,10 +263,51 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     }
 
     @Override
+    public void setTextColorOnClick(String colorHex) {
+        try {
+            Color.parseColor(colorHex);
+            this.textColorHex = colorHex;
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
     public void setBackgroundColorOnClick(String colorHex) {
         try {
             Color.parseColor(colorHex);
             this.colorHex = colorHex;
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
+    public void setBackgroundColorOnClick(String colorHex, CalendarClickShape shape) {
+        try {
+            Color.parseColor(colorHex);
+            this.colorHex = colorHex;
+            this.clickBgShape = shape;
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
+    public void setMemo(ArrayList<CalendarMemo> memoItems) {
+        this.memoItems = memoItems;
+    }
+
+    @Override
+    public void setMemoFontSize(float size) {
+        this.memoFontSize = size;
+    }
+
+    @Override
+    public void setMemoTextColor(String colorHex) {
+        try {
+            Color.parseColor(colorHex);
+            this.memoTextColor = colorHex;
         } catch (IllegalArgumentException e) {
             Log.e("ColorParse Error", "Unknown color");
         }
@@ -276,9 +330,15 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
         FragmentManager fragment = activity.getSupportFragmentManager();
         fragmentAdapter = new WeeklyFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        fragmentAdapter.addItem(new WeeklyFragmentPager(prevWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "prev");
-        fragmentAdapter.addItem(new WeeklyFragmentPager(nowWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "main");
-        fragmentAdapter.addItem(new WeeklyFragmentPager(nextWeeklyData, onClickListener, weeklyClickData, dayOfWeek, weeklySize, weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex), "next");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
+                weeklyClickData, dayOfWeek, colHeight, prevWeeklyData, weeklyStyle,
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "prev");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
+                weeklyClickData, dayOfWeek, colHeight, nowWeeklyData, weeklyStyle,
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "main");
+        fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
+                weeklyClickData, dayOfWeek, colHeight, nextWeeklyData, weeklyStyle,
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "next");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }

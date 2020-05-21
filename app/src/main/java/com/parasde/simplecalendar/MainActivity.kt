@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.parasde.library.simpleweeklycalendar.data.WeeklyOrientation
-import com.parasde.library.simpleweeklycalendar.data.WeeklySize
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 //        cal2.init(this as AppCompatActivity, dayOfWeek, null)
 
         // weekly
-        weekly.init(this as AppCompatActivity, 2020, 2, 20, dayOfWeek, WeeklySize.NORMAL, WeeklyOrientation.VERTICAL)
+        weekly.init(this as AppCompatActivity, 2020, 2, 20, dayOfWeek, WeeklyOrientation.VERTICAL)
         weekly.setWeeklyClickListener { year, month, date -> Toast.makeText(applicationContext, "$year $month $date", Toast.LENGTH_SHORT).show() }
         weekly.setWeeklyPageChangeListener { data -> Log.i("Weekly", "Prev weekly : ${data[0].weekOfMonth}\nCur weekly: ${data[6].weekOfMonth}") }
     }
