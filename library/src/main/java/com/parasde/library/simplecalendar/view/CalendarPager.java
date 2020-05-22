@@ -16,7 +16,9 @@ public interface CalendarPager {
 
     // column height -> col height * 6 = calendar height
     void setColHeight(int height);
-
+    // sunday weekday, saturday text color
+    void setDayOfWeekTextColor(String sundayColor, String weekdayColor, String saturdayColor);
+    void setDayOfWeekHeaderTextColor(String sundayColor, String weekdayColor, String saturdayColor);
 
     // date color on click
     void setTextColorOnClick(String colorHex);

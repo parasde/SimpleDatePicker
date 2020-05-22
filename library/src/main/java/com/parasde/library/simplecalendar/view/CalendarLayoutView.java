@@ -42,6 +42,8 @@ public class CalendarLayoutView implements CalendarLayout {
     private final String numberRegExp = "^[0-9]+$";
 
     private final int COL_MIN = 40;
+    private String[] dayOfWeekColor;
+    private String[] dayOfWeekHeaderColor;
 
     CalendarLayoutView(Context context) {
         this.context = context;
@@ -57,7 +59,8 @@ public class CalendarLayoutView implements CalendarLayout {
                                      Integer colHeight, ArrayList<CalendarMemo> memoItems,
                                      String colorHex, String textColorHex,
                                      CalendarClickShape clickBgShape,
-                                     float memoFontSize, String memoTextColor, float calendarFontSize) {
+                                     float memoFontSize, String memoTextColor, float calendarFontSize,
+                                     String[] dayOfWeekColor, String[] dayOfWeekHeaderColor) {
         Calendar calendar = (Calendar) cal.clone();
         calendarData = new ArrayList<>();
         this.calendarClickData = calendarClickData;
@@ -72,6 +75,8 @@ public class CalendarLayoutView implements CalendarLayout {
         this.colorHex = colorHex;
         this.textColorHex = textColorHex;
         this.clickBgShape = clickBgShape;
+        this.dayOfWeekColor = dayOfWeekColor;
+        this.dayOfWeekHeaderColor = dayOfWeekHeaderColor;
 
         if(clickBgShape == null) {
             this.clickBgShape = CalendarClickShape.RECTANGLE;
@@ -185,11 +190,23 @@ public class CalendarLayoutView implements CalendarLayout {
                 tvParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(colHeight));
             }
             if(i == 0) {
-                tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+                if(dayOfWeekHeaderColor[0] != null) {
+                    tv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[0]));
+                } else {
+                    tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+                }
             } else if(i == 6) {
-                tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
+                if(dayOfWeekHeaderColor[2] != null) {
+                    tv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[2]));
+                } else {
+                    tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
+                }
             } else if(i < 7) {
-                tv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
+                if(dayOfWeekHeaderColor[1] != null) {
+                    tv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[1]));
+                } else {
+                    tv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
+                }
             } else if(i >= (blankDate+7)) {
                 if(isMemo) {    // 일~월 날짜 뷰 및, 빈 뷰가 끝나면 layout param 값 조절 / 메모가 있고 bg 모양이 circle 일 경우 높이, 너비를 2로 나누어 사이즈 조절
                     if(clickBgShape == CalendarClickShape.CIRCLE) {
@@ -199,19 +216,13 @@ public class CalendarLayoutView implements CalendarLayout {
                     tvParam = new LinearLayout.LayoutParams(dpToPx(colHeight), dpToPx(colHeight));
                 }
 
-                tv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
-
                 contentLayout.setOnClickListener(new CalendarDateOnClick(i-blankDate-7));
-
                 calendarData.add(new CalendarData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i))));
-                if(checkSunday(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-                    tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
-                } else if(checkSaturday(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-                    tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
-                }
+
+                dateViewStyle(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)), tv);
 
                 if(clickDataCheck(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), Integer.parseInt(dateArray.get(i)))) {
-                    textViewStyle(tv);
+                    clickViewStyle(tv);
                     calendarClickData.setLayout(contentLayout);
                 }
             }
@@ -267,10 +278,11 @@ public class CalendarLayoutView implements CalendarLayout {
             if(calendarClickListener != null)  {
                 if(calendarClickData.getLayout() != null) {
                     // 이전 레이아웃 클릭 색상 초기화
-                    ((TextView)calendarClickData.getLayout().getChildAt(0)).setBackgroundResource(android.R.color.transparent);
-                    ((TextView)calendarClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.dark));
+                    TextView prevTv = ((TextView)calendarClickData.getLayout().getChildAt(0));
+                    prevTv.setBackgroundResource(android.R.color.transparent);
+                    dateViewStyle(calendarClickData.getYear(), calendarClickData.getMonth(), calendarClickData.getDate(), prevTv);
                 }
-                textViewStyle((TextView)((LinearLayout)view).getChildAt(0));
+                clickViewStyle((TextView)((LinearLayout)view).getChildAt(0));
 
                 // click date set
                 calendarClickData.setLayout((LinearLayout)view);
@@ -285,7 +297,29 @@ public class CalendarLayoutView implements CalendarLayout {
 
     }
 
-    private void textViewStyle(TextView textView) {
+    private void dateViewStyle(int year, int month, int date, TextView tv) {
+        if(dayOfWeekColor[1] != null) {
+            tv.setTextColor(Color.parseColor(dayOfWeekColor[1]));
+        } else {
+            tv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
+        }
+
+        if(checkSunday(year, month, date)) {
+            if(dayOfWeekColor[0] != null) {
+                tv.setTextColor(Color.parseColor(dayOfWeekColor[0]));
+            } else {
+                tv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+            }
+        } else if(checkSaturday(year, month, date)) {
+            if(dayOfWeekColor[2] != null) {
+                tv.setTextColor(Color.parseColor(dayOfWeekColor[2]));
+            } else {
+                tv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
+            }
+        }
+    }
+
+    private void clickViewStyle(TextView textView) {
         if(colorHex != null) {
             if(clickBgShape == CalendarClickShape.CIRCLE) {
                 textView.setBackground(circle(Color.parseColor(colorHex)));

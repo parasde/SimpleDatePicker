@@ -75,7 +75,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
                 minPrevMonth();
                 fragmentAdapter.addPrevItem(new CalendarFragmentPager(prevCalendar, onClickListener,
                         calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex,
-                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize), position + "");
+                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor), position + "");
                 CalendarPagerView.super.invalidate();
                 CalendarPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
@@ -84,7 +84,7 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
                 addNextMonth();
                 fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener,
                         calendarClickData, dayOfWeek, colHeight, memoItems, colorHex, textColorHex,
-                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize), position + "");
+                        clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor), position + "");
             }
         }
 
@@ -119,6 +119,8 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     private CalendarClickShape clickBgShape = null;
     private float memoFontSize = 10f;
     private float calendarFontSize = 17f;
+    private String[] dayOfWeekColor = new String[3];
+    private String[] dayOfWeekHeaderColor = new String[3];
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -265,6 +267,46 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
     }
 
     @Override
+    public void setDayOfWeekTextColor(String sundayColor, String weekdayColor, String saturdayColor) {
+        try {
+            if(sundayColor != null) {
+                Color.parseColor(sundayColor);
+                dayOfWeekColor[0] = sundayColor;
+            }
+            if(weekdayColor != null) {
+                Color.parseColor(weekdayColor);
+                dayOfWeekColor[1] = weekdayColor;
+            }
+            if(saturdayColor != null) {
+                Color.parseColor(saturdayColor);
+                dayOfWeekColor[2] = saturdayColor;
+            }
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
+    public void setDayOfWeekHeaderTextColor(String sundayColor, String weekdayColor, String saturdayColor) {
+        try {
+            if(sundayColor != null) {
+                Color.parseColor(sundayColor);
+                dayOfWeekHeaderColor[0] = sundayColor;
+            }
+            if(weekdayColor != null) {
+                Color.parseColor(weekdayColor);
+                dayOfWeekHeaderColor[1] = weekdayColor;
+            }
+            if(saturdayColor != null) {
+                Color.parseColor(saturdayColor);
+                dayOfWeekHeaderColor[2] = saturdayColor;
+            }
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
     public void setMemo(ArrayList<CalendarMemo> memoItems) {
         this.memoItems = memoItems;
     }
@@ -305,13 +347,13 @@ public class CalendarPagerView extends ViewPager implements CalendarPager {
         fragmentAdapter = new CalendarFragmentPagerAdapter(fragment, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         fragmentAdapter.addItem(new CalendarFragmentPager(prevCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
-                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "0");
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor), "0");
 
         fragmentAdapter.addItem(new CalendarFragmentPager(calendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
-                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "1");
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor), "1");
 
         fragmentAdapter.addItem(new CalendarFragmentPager(nextCalendar, onClickListener, calendarClickData, dayOfWeek, colHeight,
-                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize), "2");
+                memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor), "2");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }

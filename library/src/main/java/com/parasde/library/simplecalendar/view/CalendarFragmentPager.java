@@ -27,10 +27,13 @@ public class CalendarFragmentPager extends CalendarFragment {
     private String memoTextColor;
     private CalendarClickShape clickBgShape;
     private float memoFontSize, calendarFontSize;
+    private String[] dayOfWeekColor;
+    private String[] dayOfWeekHeaderColor;
 
     CalendarFragmentPager(Calendar cal, CalendarClickListener calendarClickListener,
                           CalendarClickData calendarClickData, String[] weekDay, Integer colHeight,
-                          ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickShape clickBgShape, float memoFontSize, String memoTextColor, float calendarFontSize) {
+                          ArrayList<CalendarMemo> memoItems, String colorHex, String textColorHex, CalendarClickShape clickBgShape,
+                          float memoFontSize, String memoTextColor, float calendarFontSize, String[] dayOfWeekColor, String[] dayOfWeekHeaderColor) {
         this.calendarClickListener = calendarClickListener;
         this.calendarClickData = calendarClickData;
         this.weekDay = weekDay;
@@ -43,6 +46,8 @@ public class CalendarFragmentPager extends CalendarFragment {
         this.memoFontSize = memoFontSize;
         this.memoTextColor = memoTextColor;
         this.calendarFontSize = calendarFontSize;
+        this.dayOfWeekColor = dayOfWeekColor;
+        this.dayOfWeekHeaderColor = dayOfWeekHeaderColor;
     }
 
     // select pager calendar
@@ -59,6 +64,6 @@ public class CalendarFragmentPager extends CalendarFragment {
     protected void initLayout(@NotNull LinearLayout layout) {
         CalendarLayoutView calLayout = new CalendarLayoutView(getContext());
         if(calendarClickListener != null) calLayout.setCalendarDateOnClickListener(calendarClickListener);
-        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize));
+        layout.addView(calLayout.onCreateLayout(cal, weekDay, calendarClickData, colHeight, memoItems, colorHex, textColorHex, clickBgShape, memoFontSize, memoTextColor, calendarFontSize, dayOfWeekColor, dayOfWeekHeaderColor));
     }
 }

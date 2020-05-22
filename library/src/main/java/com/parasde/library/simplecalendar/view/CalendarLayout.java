@@ -15,5 +15,5 @@ public interface CalendarLayout {
     GridLayout onCreateLayout(Calendar calendar, String[] weekDay, CalendarClickData calendarClickData,
                               Integer colHeight, ArrayList<CalendarMemo> memoItems, String colorHex,
                               String textColorHex, CalendarClickShape clickBgShape, float memoFontSize,
-                              String memoTextColor, float calendarFontSize);
+                              String memoTextColor, float calendarFontSize, String[] dayOfWeekColor, String[] dayOfWeekHeaderColor);
 }
