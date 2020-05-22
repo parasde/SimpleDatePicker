@@ -24,22 +24,11 @@ Use the following method to show the header
 
 ### note
 
-version 2.3.10 release  
+version 2.4.10 release  
 
-Calendar
- - CalendarSize 제거 -> setColHeight(int dp) 변경
- - setTextColorOnClick 추가 (클릭 시 날짜 텍스트 색상)
- - setBackgroundColorOnClick(String color hex, CalendarClickData.Shape shape) 추가 (클릭 시 배경 모양 변경 default = RECTANGLE)
- - onTouchEnable -> onSwipeEnable 변경
- 
-
-WeeklyCalendar
- - setTextColorOnClick (color hex) 추가
- - setBackgroundColorOnClick (color hex, shape) 추가
- - setMemo 추가
- - setMemoFontSize 추가
- - setMemoTextColor 추가
-
+Calendar, WeeklyCalendar 요일 색상변경 추가
+ - setDayOfWeekTextColor
+ - setDayOfWeekHeaderTextColor
 
 ---
 
@@ -47,7 +36,7 @@ WeeklyCalendar
 
 __Gradle__
 ```
-implementation 'com.github.parasde:simple-calendar:2.3.10'
+implementation 'com.github.parasde:simple-calendar:2.4.10'
 ```
 
 __activity_sample.xml__
