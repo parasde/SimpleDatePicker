@@ -18,5 +18,5 @@ public interface WeeklyLayout {
                               WeeklyStyle weeklyStyle, float dayOfWeekFontSize, float dateFontSize,
                               String colorHex, String textColorHex,
                               ArrayList<CalendarMemo> memoItems, String memoTextColor, float memoFontSize,
-                              CalendarClickShape clickBgShape);
+                              CalendarClickShape clickBgShape, String[] dayOfWeekColor, String[] dayOfWeekHeaderColor);
 }

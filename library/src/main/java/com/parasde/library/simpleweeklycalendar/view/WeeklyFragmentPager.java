@@ -33,12 +33,15 @@ public class WeeklyFragmentPager extends WeeklyFragment {
 
     private CalendarClickShape clickBgShape;
 
+    private String[] dayOfWeekColor = new String[3];
+    private String[] dayOfWeekHeaderColor = new String[3];
+
     public WeeklyFragmentPager(WeeklyClickListener weeklyClickListener, WeeklyClickData weeklyClickData,
                                String[] weekDay, Integer colHeight, ArrayList<WeeklyData> weeklyData,
                                WeeklyStyle weeklyStyle, float dayOfWeekFontSize, float dateFontSize,
                                String colorHex, String textColorHex,
                                ArrayList<CalendarMemo> memoItems, String memoTextColor, float memoFontSize,
-                               CalendarClickShape clickBgShape) {
+                               CalendarClickShape clickBgShape, String[] dayOfWeekColor, String[] dayOfWeekHeaderColor) {
         this.weeklyClickListener = weeklyClickListener;
         this.weeklyClickData = weeklyClickData;
         this.weekDay = weekDay;
@@ -53,6 +56,8 @@ public class WeeklyFragmentPager extends WeeklyFragment {
         this.memoTextColor = memoTextColor;
         this.memoFontSize = memoFontSize;
         this.clickBgShape = clickBgShape;
+        this.dayOfWeekColor = dayOfWeekColor;
+        this.dayOfWeekHeaderColor = dayOfWeekHeaderColor;
     }
 
     // select pager calendar
@@ -71,6 +76,6 @@ public class WeeklyFragmentPager extends WeeklyFragment {
         if(weeklyClickListener != null) calLayout.setCalendarDateOnClickListener(weeklyClickListener);
         layout.addView(calLayout.onCreateLayout(weeklyClickData, weekDay, colHeight, weeklyData,
                 weeklyStyle, dayOfWeekFontSize, dateFontSize, colorHex, textColorHex,  memoItems, memoTextColor, memoFontSize,
-                clickBgShape));
+                clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor));
     }
 }

@@ -18,6 +18,8 @@ public interface WeeklyPager {
 
 
     void setColHeight(int height);
+    void setDayOfWeekTextColor(String sundayColor, String weekdayColor, String saturdayColor);
+    void setDayOfWeekHeaderTextColor(String sundayColor, String weekdayColor, String saturdayColor);
     void setWeeklyCalendarStyle(WeeklyStyle weeklyStyle);
 
 

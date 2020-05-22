@@ -45,6 +45,9 @@ public class WeeklyLayoutView implements WeeklyLayout {
 
     private final int COL_MIN = 40;
 
+    private String[] dayOfWeekColor = new String[3];
+    private String[] dayOfWeekHeaderColor = new String[3];
+
     WeeklyLayoutView(Context context) {
         this.context = context;
     }
@@ -59,7 +62,7 @@ public class WeeklyLayoutView implements WeeklyLayout {
                                      ArrayList<WeeklyData> weeklyData, WeeklyStyle weeklyStyle,
                                      float dayOfWeekFontSize, float dateFontSize, String colorHex,
                                      String textColorHex, ArrayList<CalendarMemo> memoItems, String memoTextColor,
-                                     float memoFontSize, CalendarClickShape clickBgShape) {
+                                     float memoFontSize, CalendarClickShape clickBgShape, String[] dayOfWeekColor, String[] dayOfWeekHeaderColor) {
         this.weeklyClickData = weeklyClickData;
         this.weeklyData = weeklyData;
         if(weekDay != null && weekDay.length == 7) {
@@ -77,6 +80,8 @@ public class WeeklyLayoutView implements WeeklyLayout {
         if(clickBgShape == null) {
             this.clickBgShape = CalendarClickShape.RECTANGLE;
         }
+        this.dayOfWeekColor = dayOfWeekColor;
+        this.dayOfWeekHeaderColor = dayOfWeekHeaderColor;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -152,31 +157,19 @@ public class WeeklyLayoutView implements WeeklyLayout {
             dayOfWeekTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             dayOfWeekTv.setGravity(Gravity.CENTER_VERTICAL);
             dayOfWeekTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dayOfWeekFontSize);
-            if(i == 0) {
-                dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
-            } else if(i == 6) {
-                dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
-            } else {
-                dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
-            }
 
             TextView dateTv = new TextView(context);
             dateTv.setLayoutParams(tvParams);
             dateTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             dateTv.setGravity(Gravity.CENTER_VERTICAL);
-            dateTv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
             dateTv.setText(String.valueOf(weeklyData.get(i).getDate()));
             dateTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dateFontSize);
 
-            contentLayout.setOnClickListener(new CalendarDateOnClick(i));
-            if(checkSunday(weeklyData.get(i).getYear(), weeklyData.get(i).getMonth()-1, weeklyData.get(i).getDate())) {
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
-            } else if(i == 6) {
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
-            }
+            dateViewStyle(i, dayOfWeekTv, dateTv);
 
+            contentLayout.setOnClickListener(new CalendarDateOnClick(i));
             if(clickDataCheck(weeklyData.get(i).getYear(), weeklyData.get(i).getMonth()-1, weeklyData.get(i).getDate())) {
-                textViewStyle(dateTv);
+                clickViewStyle(dateTv);
                 weeklyClickData.setLayout(contentLayout);
                 weeklyClickData.setPosition(i);
             }
@@ -252,7 +245,6 @@ public class WeeklyLayoutView implements WeeklyLayout {
             dayOfWeekTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             dayOfWeekTv.setGravity(Gravity.CENTER_VERTICAL);
             dayOfWeekTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dayOfWeekFontSize);
-            dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
 
             TextView dateTv = new TextView(context);
             dateTv.setLayoutParams(tvParams);
@@ -260,22 +252,15 @@ public class WeeklyLayoutView implements WeeklyLayout {
             dateTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             dateTv.setGravity(Gravity.CENTER_VERTICAL);
             dateTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dateFontSize);
-            dateTv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
 
-            if(i == 0) {
-                dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
-            } else if(i == 6) {
-                dayOfWeekTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
-            }
+            dateViewStyle(i, dayOfWeekTv, dateTv);
 
             dateLayout.addView(dateTv);
             dateLayout.addView(dayOfWeekTv);
 
             dateLayout.setOnClickListener(new CalendarDateOnClick(i));
             if(clickDataCheck(weeklyData.get(i).getYear(), weeklyData.get(i).getMonth()-1, weeklyData.get(i).getDate())) {
-                textViewStyle(dateLayout);
+                clickViewStyle(dateLayout);
                 weeklyClickData.setLayout(dateLayout);
                 weeklyClickData.setPosition(i);
             }
@@ -310,15 +295,6 @@ public class WeeklyLayoutView implements WeeklyLayout {
         }
     }
 
-    // sunday check
-    private boolean checkSunday(int year, int month, int date) {
-        Calendar cal = (Calendar)Calendar.getInstance().clone();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.DATE, date);
-        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-    }
-
     // click date check
     private boolean clickDataCheck(int year, int month, int date) {
         return weeklyClickData.getYear() == year && weeklyClickData.getMonth() == month && weeklyClickData.getDate() == date;
@@ -335,31 +311,14 @@ public class WeeklyLayoutView implements WeeklyLayout {
                 if(weeklyClickData.getLayout() != null) {
                     if(weeklyStyle == WeeklyStyle.DEFAULT) {
                         ((TextView)weeklyClickData.getLayout().getChildAt(1)).setBackgroundResource(android.R.color.transparent);
-                        // date text color
-                        if(weeklyClickData.getPosition() == 0) {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.calSunday));
-                        } else if(weeklyClickData.getPosition() == 6) {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.calSaturday));
-                        } else {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.dark));
-                        }
+                        dateViewStyle(weeklyClickData.getPosition(), ((TextView)weeklyClickData.getLayout().getChildAt(0)), ((TextView)weeklyClickData.getLayout().getChildAt(1)));
 
-                        textViewStyle(((LinearLayout)view).getChildAt(1));
+                        clickViewStyle(((LinearLayout)view).getChildAt(1));
                     } else {
                         weeklyClickData.getLayout().setBackgroundResource(android.R.color.transparent);
-                        // date and dayOfWeek text color
-                        if(weeklyClickData.getPosition() == 0) {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.calSunday));
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.calSunday));
-                        } else if(weeklyClickData.getPosition() == 6) {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.calSaturday));
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.calSaturday));
-                        } else {
-                            ((TextView)weeklyClickData.getLayout().getChildAt(0)).setTextColor(context.getColor(R.color.dark));
-                            ((TextView)weeklyClickData.getLayout().getChildAt(1)).setTextColor(context.getColor(R.color.dark));
-                        }
+                        dateViewStyle(weeklyClickData.getPosition(), ((TextView)weeklyClickData.getLayout().getChildAt(1)), ((TextView)weeklyClickData.getLayout().getChildAt(0)));
 
-                        textViewStyle(view);
+                        clickViewStyle(view);
                     }
                 }
 
@@ -376,7 +335,48 @@ public class WeeklyLayoutView implements WeeklyLayout {
         }
     }
 
-    private void textViewStyle(View view) {
+    private void  dateViewStyle(int position, TextView headerTv, TextView dateTv) {
+        if(position == 0) {
+            if(dayOfWeekHeaderColor[0] != null) {
+                headerTv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[0]));
+            } else {
+                headerTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+            }
+
+            if(dayOfWeekColor[0] != null) {
+                dateTv.setTextColor(Color.parseColor(dayOfWeekColor[0]));
+            } else {
+                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSunday));
+            }
+        } else if(position == 6) {
+            if(dayOfWeekHeaderColor[2] != null) {
+                headerTv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[2]));
+            } else {
+                headerTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
+            }
+
+            if(dayOfWeekColor[2] != null) {
+                dateTv.setTextColor(Color.parseColor(dayOfWeekColor[2]));
+            } else {
+                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calSaturday));
+            }
+        } else {
+            if(dayOfWeekHeaderColor[1] != null) {
+                headerTv.setTextColor(Color.parseColor(dayOfWeekHeaderColor[1]));
+            } else {
+                headerTv.setTextColor(ContextCompat.getColor(context, R.color.calHeader));
+            }
+
+            if(dayOfWeekColor[1] != null) {
+                dateTv.setTextColor(Color.parseColor(dayOfWeekColor[1]));
+            } else {
+                dateTv.setTextColor(ContextCompat.getColor(context, R.color.calDate));
+            }
+        }
+
+    }
+
+    private void clickViewStyle(View view) {
         if(colorHex != null) {
             if(clickBgShape == CalendarClickShape.CIRCLE) {
                 view.setBackground(circle(Color.parseColor(colorHex)));

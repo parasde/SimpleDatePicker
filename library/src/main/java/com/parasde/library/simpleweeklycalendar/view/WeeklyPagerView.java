@@ -94,7 +94,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 minPage--;
                 fragmentAdapter.addPrevItem(new WeeklyFragmentPager(onClickListener,
                         weeklyClickData, dayOfWeek, colHeight, prevWeeklyData, weeklyStyle,
-                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), minPage + "");
+                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor), minPage + "");
                 WeeklyPagerView.super.invalidate();
                 WeeklyPagerView.super.setCurrentItem(position+1, false);
             } else if(position == fragmentAdapter.getCount()-1) {    // last index..
@@ -104,7 +104,7 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
                 maxPage++;
                 fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
                         weeklyClickData, dayOfWeek, colHeight, nextWeeklyData, weeklyStyle,
-                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), maxPage + "");
+                        dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor), maxPage + "");
             }
         }
 
@@ -146,6 +146,8 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     private String memoTextColor = null;
     private CalendarClickShape clickBgShape = null;
     private float memoFontSize = 10f;
+    private String[] dayOfWeekColor = new String[3];
+    private String[] dayOfWeekHeaderColor = new String[3];
 
     // get child view height
     private int getHeightMeasureSpec(int widthMeasureSpec, int heightMeasureSpec) {
@@ -237,6 +239,46 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
     @Override
     public void setColHeight(int height) {
         this.colHeight = height;
+    }
+
+    @Override
+    public void setDayOfWeekTextColor(String sundayColor, String weekdayColor, String saturdayColor) {
+        try {
+            if(sundayColor != null) {
+                Color.parseColor(sundayColor);
+                dayOfWeekColor[0] = sundayColor;
+            }
+            if(weekdayColor != null) {
+                Color.parseColor(weekdayColor);
+                dayOfWeekColor[1] = weekdayColor;
+            }
+            if(saturdayColor != null) {
+                Color.parseColor(saturdayColor);
+                dayOfWeekColor[2] = saturdayColor;
+            }
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
+    }
+
+    @Override
+    public void setDayOfWeekHeaderTextColor(String sundayColor, String weekdayColor, String saturdayColor) {
+        try {
+            if(sundayColor != null) {
+                Color.parseColor(sundayColor);
+                dayOfWeekHeaderColor[0] = sundayColor;
+            }
+            if(weekdayColor != null) {
+                Color.parseColor(weekdayColor);
+                dayOfWeekHeaderColor[1] = weekdayColor;
+            }
+            if(saturdayColor != null) {
+                Color.parseColor(saturdayColor);
+                dayOfWeekHeaderColor[2] = saturdayColor;
+            }
+        } catch (IllegalArgumentException e) {
+            Log.e("ColorParse Error", "Unknown color");
+        }
     }
 
     @Override
@@ -332,13 +374,13 @@ public class WeeklyPagerView extends ViewPager implements WeeklyPager {
 
         fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
                 weeklyClickData, dayOfWeek, colHeight, prevWeeklyData, weeklyStyle,
-                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "prev");
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor), "prev");
         fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
                 weeklyClickData, dayOfWeek, colHeight, nowWeeklyData, weeklyStyle,
-                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "main");
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor), "main");
         fragmentAdapter.addItem(new WeeklyFragmentPager(onClickListener,
                 weeklyClickData, dayOfWeek, colHeight, nextWeeklyData, weeklyStyle,
-                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape), "next");
+                dayOfWeekFontSize, dateFontSize, colorHex, textColorHex, memoItems, memoTextColor, memoFontSize, clickBgShape, dayOfWeekColor, dayOfWeekHeaderColor), "next");
         this.setAdapter(fragmentAdapter);
         this.setCurrentItem(1, false);
     }
